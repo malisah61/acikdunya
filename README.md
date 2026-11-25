@@ -57,6 +57,9 @@ Sonra bu depoda Settings → Secrets and variables → Actions → New repositor
 
 ## Yol haritası
 1. Atölyeden 3D karakter (görsel → 3D → iskelet) ve fotoğraftan sana benzeyen oyuncu modeli
+   - [x] 9 karakterin önden boydan görünümü (atölyeden, `assets/uretilen/karakterler/`)
+   - [ ] Görselleri atölyenin 3D hattıyla (TripoSR → model.glb) modele çevirip kutu karakterlerin yerine koymak
+   - [ ] Oyuncu: `assets/ben/foto.png` yüklenince portre ve görünüm
 2. Yeni bölgeler (çarşı, sahil, sanayi) ve parça parça yüklenen büyük harita
 3. Meslekler ve mini oyunlar (acil nöbeti, taksi, esnaflık), kariyer basamakları
    - [x] Kariyer basamakları (hastane, bakkal) ve bakkalda mesai
@@ -70,6 +73,7 @@ Sonra bu depoda Settings → Secrets and variables → Actions → New repositor
    - [x] Günlük görevler (telefonda), mahalle itibarı, ilk yan görev (teyzenin ekmeği)
    - [ ] Daha çok yan görev (öğrencinin dersi, memurun kayıp cüzdanı, işçinin yemeği) ve sakinlerle kişisel dostluk
 6. Hava durumu, mevsimler, sesler
+   - [x] Dikişsiz dokular (asfalt, çimen, kaldırım, parke, sıva, yaprak); çatı ve ekmek ikonu yeniden sipariş bekliyor
    - [x] Ses yöneticisi, efektler, zemine göre adım, gündüz/gece ortam, NPC replikleri, ses ayarı
    - [x] Kahvehane ve hastane iç ortam sesi, mahalle ve gece müziği (koddan sentez: `araclar/ses_sentez.py`)
    - [ ] Uzaktan kısa ezan (sentezle olmaz; atölye ses sekmesi ya da lisanslı gerçek kayıt bekliyor)

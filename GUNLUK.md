@@ -24,3 +24,6 @@
 - İyileştirme: sakinlerin tipi var (teyze, kadın, öğrenci, memur, işçi) — her biri kendi cümlesi ve sesiyle selam verir. Mesaj süresi satır sayısına göre uzuyor.
 - Sesler (14 yeni): Speko ile 7 replik (öğrenci, memur, işçi, kadın selamı; Hasan ve Rıza teşekkürü; Dr. Selin terfi tebriği); koddan sentez (`araclar/ses_sentez.py`): kahvehane ve hastane iç ortamı, mahalle ve gece müziği, uyku, görev tamam, terfi fanfarı. İç mekâna girince o binanın ortam sesi açılıyor, müzik kısılıyor. Ezan: sentezle saygılı olmayacağı için atlandı.
 - Atölye: `siparis/siparis.py`'ye `"doku": true` → `tileable=true, auto=false` eki gönderildi. Bu oturumun atölyeye erişimi var; karakter ve ikon siparişi verildi.
+- Görseller (Sprite Atölye, 3 tur): 9 karakter görünümü seçildi (`assets/uretilen/karakterler/`: bakkal Hasan, kahveci Rıza, Dr. Selin, hemşire Ayşe, teyze, öğrenci, memur, işçi, kadın), ikonlar: çay, nöbet, yatak, simit, raf (bakkal mesaisi), tepsi (garsonluk), telefon. Hemşire (anime çıkmıştı), kadın (iki kişi) ve simit (çörek gibi) tarifleri düzeltilip 2. turda yenilendi. Ekmek ikonu kötü çıktı, tarifi düzeltildi.
+- Dokular (ilk kez, dikişsiz): asfalt, çimen, kaldırım, parke, sıva, yaprak — 512 px. Çatı beyaz lekeli çıktı, tarifi düzeltildi; şimdilik düz renk.
+- `assets/ben/foto.png` hâlâ yok: `kisi_oyuncu` ve `oyuncu_portre` atlandı.

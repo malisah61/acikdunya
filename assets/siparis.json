@@ -240,11 +240,11 @@
   },
   {
    "ad": "ikon_ekmek",
-   "tarif": "turkish white bread loaf, crusty golden, game item icon, cartoon, single object",
+   "tarif": "one single turkish white bread loaf, crusty golden oval loaf with a slash on top, isolated, no text, no frame, game item icon, cartoon, single object",
    "tur": "esya",
    "stil": "cartoon",
    "adet": 2,
-   "seed": 18,
+   "seed": 28,
    "boyut": [
     512,
     512
