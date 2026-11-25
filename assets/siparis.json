@@ -302,6 +302,19 @@
         512
       ],
       "cikti": "assets/uretilen/ikon_hava_gunes.png"
+    },
+    {
+      "ad": "ikon_kitap",
+      "tarif": "one open book with a bookmark and a pencil resting on it, isolated, no text, no frame, game item icon, cartoon, single object",
+      "tur": "esya",
+      "stil": "cartoon",
+      "adet": 2,
+      "seed": 45,
+      "boyut": [
+        512,
+        512
+      ],
+      "cikti": "assets/uretilen/ikon_kitap.png"
     }
   ]
 }
