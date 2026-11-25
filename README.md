@@ -1,1 +1,42 @@
-# acikdunya
+# Açık Dünya
+
+Gerçek hayat RPG'si: tepeden bakan 3D kamera (GTA 1-2 havası), açık dünya mahalle, kendi karakterin.
+Godot 4.3 + GDScript, GL Compatibility (eski telefonlarda da çalışsın diye).
+
+## İndir (her gönderimde otomatik derlenir)
+- Android: https://github.com/malisah61/acikdunya/releases/download/son-surum/acikdunya.apk
+- Windows: https://github.com/malisah61/acikdunya/releases/download/son-surum/acikdunya.exe
+- Linux: https://github.com/malisah61/acikdunya/releases/download/son-surum/acikdunya.x86_64
+
+## Şu an oyunda (v0.1 — ilk mahalle)
+- Karakter oluşturma ("Kendini oyuna ekle"): isim, ten, saç rengi/modeli, sakal, gömlek, pantolon
+- Mahalle: 3×3 yol ağı, kaldırımlar, sokak lambaları, park + havuz, otopark, apartmanlar
+- İçine girilen binalar (girince çatı ve ön duvar kalkar): **Ev** (uyu), **Bakkal** (simit + ayran), **Kahvehane** (çay), **Hastane** (8 saatlik nöbet → para)
+- Gece-gündüz döngüsü (24 dakikada bir gün): gün batımı, lambalar ve pencereler gece yanar
+- Tokluk / enerji / para; enerji biterse bayılırsın
+- Gündüz dolaşıp gece evine dönen 24 mahalle sakini
+- Otomatik kayıt (dakikada bir, uyuyunca, nöbet bitince)
+
+## Kontroller
+- PC: WASD / oklar yürü, Shift koş, E eylem, fare tekerleği yakınlaş
+- Telefon: sol alt joystick (sonuna kadar itince koşar), sağ alt eylem ve +/− düğmeleri
+
+## Sprite Atölye bağlantısı
+Oyunun görselleri [Sprite Atölye](https://github.com/malisah61/sprite-atolye)'den gelir. Oyun, `assets/uretilen/` altında bulduğu her görseli kendiliğinden kullanır, yoksa düz renklerle çalışır.
+
+| Dosya | Ne | Oyunda nerede |
+|---|---|---|
+| `assets/siparis.json` | portre + ikonlar | sol üst panel, eylem düğmesi |
+| `assets/siparis_doku.json` | dikişsiz dokular (çimen, asfalt, kaldırım, sıva, parke, çatı, yaprak) | tüm dünya |
+
+Sipariş vermek için: sprite-atolye → Actions → **Sipariş** → hedef `malisah61/acikdunya`, dosya `assets/siparis.json`.
+
+**Kendi yüzün:** `assets/ben/foto.png` olarak önden net bir fotoğraf yükle, sonra siparişi `sadece: oyuncu_portre` ile çalıştır. Fotoğraf oyun paketine girmez.
+
+## Yol haritası
+1. Atölyeden 3D karakter (görsel → 3D → iskelet) ve fotoğraftan sana benzeyen oyuncu modeli
+2. Yeni bölgeler (çarşı, sahil, sanayi) ve parça parça yüklenen büyük harita
+3. Meslekler ve mini oyunlar (acil nöbeti, taksi, esnaflık), kariyer basamakları
+4. Ev kiralama/satın alma, eşyalar, araba kullanma
+5. Komşularla ilişki, yan görevler, telefon menüsü
+6. Hava durumu, mevsimler, sesler

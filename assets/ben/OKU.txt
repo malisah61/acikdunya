@@ -1,0 +1,1 @@
+Buraya kendi fotoğrafını foto.png adıyla koy (önden, yüzün net). Sprite Atölye bundan çizgi film portreni yapar. Bu klasör oyun paketine girmez.

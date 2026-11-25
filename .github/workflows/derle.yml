@@ -1,0 +1,73 @@
+name: Derle (Android + Windows + Linux)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: derle
+  cancel-in-progress: true
+
+jobs:
+  derle:
+    runs-on: ubuntu-latest
+    container: barichello/godot-ci:4.3
+    env:
+      GODOT_ANDROID_KEYSTORE_DEBUG_PATH: /root/debug.keystore
+      GODOT_ANDROID_KEYSTORE_DEBUG_USER: androiddebugkey
+      GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: android
+      GODOT_ANDROID_KEYSTORE_RELEASE_PATH: /root/debug.keystore
+      GODOT_ANDROID_KEYSTORE_RELEASE_USER: androiddebugkey
+      GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: android
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Şablonlar ve ayarlar
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates ~/.config
+          cp -r /root/.config/godot ~/.config/godot 2>/dev/null || true
+          cp -r /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/ 2>/dev/null || true
+          if [ ! -f /root/debug.keystore ]; then
+            keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore /root/debug.keystore \
+              -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999
+          fi
+
+      - name: İçe aktar
+        run: godot --headless --import 2>&1 | tail -20 || true
+
+      - name: Duman testi (betik hatası varsa durdur)
+        run: |
+          godot --headless --quit-after 900 2>&1 | tee test.log || true
+          if grep -E "SCRIPT ERROR|Parse Error|Failed to load script|Invalid call|Invalid access|Invalid assignment" test.log; then
+            echo "::error::Betik hatası bulundu"; exit 1
+          fi
+
+      - name: Dışa aktar
+        run: |
+          mkdir -p build
+          godot --headless --export-release "Android" build/acikdunya.apk
+          godot --headless --export-release "Windows" build/acikdunya.exe
+          godot --headless --export-release "Linux" build/acikdunya.x86_64
+          ls -la build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: acikdunya
+          path: build/
+
+      - name: Son sürüm (indirme linkleri)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: son-surum
+          name: Açık Dünya — son sürüm
+          body: "main dalının son derlemesi (${{ github.sha }})."
+          prerelease: false
+          make_latest: true
+          files: |
+            build/acikdunya.apk
+            build/acikdunya.exe
+            build/acikdunya.x86_64

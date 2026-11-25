@@ -1,0 +1,9 @@
+{
+  "siparisler": [
+    {"ad": "oyuncu_portre", "tarif": "friendly cartoon portrait of a man, head and shoulders, warm smile, game avatar icon, clean outline", "tur": "karakter", "stil": "cartoon", "adet": 2, "seed": 61, "boyut": [768, 768], "referans": "assets/ben/foto.png", "ref_scale": 0.6, "cikti": "assets/uretilen/oyuncu_portre.png"},
+    {"ad": "ikon_simit", "tarif": "turkish simit, round sesame bread ring, game item icon, cartoon, single object", "tur": "esya", "stil": "cartoon", "adet": 2, "seed": 11, "boyut": [512, 512], "cikti": "assets/uretilen/ikon_simit.png"},
+    {"ad": "ikon_cay", "tarif": "turkish tea in a small tulip shaped glass on a saucer, game item icon, cartoon, single object", "tur": "esya", "stil": "cartoon", "adet": 2, "seed": 12, "boyut": [512, 512], "cikti": "assets/uretilen/ikon_cay.png"},
+    {"ad": "ikon_nobet", "tarif": "doctor stethoscope, game item icon, cartoon, single object", "tur": "esya", "stil": "cartoon", "adet": 2, "seed": 13, "boyut": [512, 512], "cikti": "assets/uretilen/ikon_nobet.png"},
+    {"ad": "ikon_yatak", "tarif": "cozy single bed with blue blanket and white pillow, game item icon, cartoon, single object", "tur": "esya", "stil": "cartoon", "adet": 2, "seed": 14, "boyut": [512, 512], "cikti": "assets/uretilen/ikon_yatak.png"}
+  ]
+}
