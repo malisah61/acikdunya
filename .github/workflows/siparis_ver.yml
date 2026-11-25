@@ -1,0 +1,38 @@
+name: Atölyeye sipariş ver
+
+# assets/siparis*.json değişince (ya da elle) Sprite Atölye'nin "Sipariş" iş akışını başlatır.
+# Gerekli: bu depoda ATOLYE_TOKEN secret'ı (sprite-atolye için Actions: Read and write izinli token).
+on:
+  push:
+    branches: [main]
+    paths: ['assets/siparis.json']
+  workflow_dispatch:
+    inputs:
+      dosya:
+        description: 'Sipariş dosyası'
+        default: 'assets/siparis.json'
+      sadece:
+        description: 'İsteğe bağlı: sadece bu adlar (virgüllü)'
+        default: ''
+
+jobs:
+  ver:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sipariş iş akışını başlat
+        env:
+          TOKEN: ${{ secrets.ATOLYE_TOKEN }}
+          DOSYA: ${{ inputs.dosya || 'assets/siparis.json' }}
+          SADECE: ${{ inputs.sadece || '' }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::ATOLYE_TOKEN secret'ı yok. README'deki 'Atölye tokenı' adımına bak."; exit 1
+          fi
+          govde=$(jq -nc --arg d "$DOSYA" --arg s "$SADECE" \
+            '{ref:"main",inputs:{hedef:"malisah61/acikdunya",dal:"main",dosya:$d,sadece:$s}}')
+          kod=$(curl -s -o cevap.txt -w '%{http_code}' -X POST \
+            -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/malisah61/sprite-atolye/actions/workflows/siparis.yml/dispatches -d "$govde")
+          cat cevap.txt; echo "HTTP $kod"
+          [ "$kod" = "204" ] || exit 1
+          echo "Sipariş başladı: https://github.com/malisah61/sprite-atolye/actions/workflows/siparis.yml" >> $GITHUB_STEP_SUMMARY
