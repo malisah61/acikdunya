@@ -1,12 +1,96 @@
 {
-  "_not": "Dikişsiz zemin/duvar dokuları. Atölyenin siparis.py'si \"doku\": true olanlarda tileable=true, auto=false gönderir (25 Kasım). 25 Kasım gecesi 6 doku seçildi; çatı beyaz lekeli çıktı, tarifi düzeltildi, yeniden sipariş edilecek.",
+  "_not": "Dikişsiz zemin/duvar dokuları. Atölyenin siparis.py'si \"doku\": true olanlarda tileable=true, auto=false gönderir (25 Kasım). 25 Kasım gecesi 6 doku seçildi; çatı 26 Kasım gecesi düzeltilmiş tarifle yeniden üretildi (dikişsiz).",
   "siparisler": [
-    {"ad": "doku_cimen", "doku": true, "tarif": "hand painted game texture, seamless tileable green grass ground with tiny flowers, top-down, even lighting, flat, no shadows", "stil": "other", "adet": 1, "seed": 21, "boyut": [1024, 1024], "cikti": "assets/uretilen/doku_cimen.png"},
-    {"ad": "doku_asfalt", "doku": true, "tarif": "hand painted game texture, seamless tileable dark grey asphalt road surface, subtle cracks, top-down, even lighting, flat", "stil": "other", "adet": 1, "seed": 22, "boyut": [1024, 1024], "cikti": "assets/uretilen/doku_asfalt.png"},
-    {"ad": "doku_kaldirim", "doku": true, "tarif": "hand painted game texture, seamless tileable light grey paving stones sidewalk, top-down, even lighting, flat", "stil": "other", "adet": 1, "seed": 23, "boyut": [1024, 1024], "cikti": "assets/uretilen/doku_kaldirim.png"},
-    {"ad": "doku_siva", "doku": true, "tarif": "hand painted game texture, seamless tileable off-white plaster wall, subtle stains, front view, even lighting, flat", "stil": "other", "adet": 1, "seed": 24, "boyut": [1024, 1024], "cikti": "assets/uretilen/doku_siva.png"},
-    {"ad": "doku_parke", "doku": true, "tarif": "hand painted game texture, seamless tileable warm wooden parquet floor, top-down, even lighting, flat", "stil": "other", "adet": 1, "seed": 25, "boyut": [1024, 1024], "cikti": "assets/uretilen/doku_parke.png"},
-    {"ad": "doku_cati", "doku": true, "tarif": "hand painted game texture, seamless tileable red clay roof tiles in overlapping rows, the whole surface fully covered with tiles, no gaps, no holes, no white areas, top-down, even lighting, flat", "stil": "other", "adet": 1, "seed": 36, "boyut": [1024, 1024], "cikti": "assets/uretilen/doku_cati.png"},
-    {"ad": "doku_yaprak", "doku": true, "tarif": "hand painted game texture, seamless tileable dense green tree leaves foliage, even lighting, flat", "stil": "other", "adet": 1, "seed": 27, "boyut": [1024, 1024], "cikti": "assets/uretilen/doku_yaprak.png"}
+    {
+      "ad": "doku_cimen",
+      "doku": true,
+      "tarif": "hand painted game texture, seamless tileable green grass ground with tiny flowers, top-down, even lighting, flat, no shadows",
+      "stil": "other",
+      "adet": 1,
+      "seed": 21,
+      "boyut": [
+        1024,
+        1024
+      ],
+      "cikti": "assets/uretilen/doku_cimen.png"
+    },
+    {
+      "ad": "doku_asfalt",
+      "doku": true,
+      "tarif": "hand painted game texture, seamless tileable dark grey asphalt road surface, subtle cracks, top-down, even lighting, flat",
+      "stil": "other",
+      "adet": 1,
+      "seed": 22,
+      "boyut": [
+        1024,
+        1024
+      ],
+      "cikti": "assets/uretilen/doku_asfalt.png"
+    },
+    {
+      "ad": "doku_kaldirim",
+      "doku": true,
+      "tarif": "hand painted game texture, seamless tileable light grey paving stones sidewalk, top-down, even lighting, flat",
+      "stil": "other",
+      "adet": 1,
+      "seed": 23,
+      "boyut": [
+        1024,
+        1024
+      ],
+      "cikti": "assets/uretilen/doku_kaldirim.png"
+    },
+    {
+      "ad": "doku_siva",
+      "doku": true,
+      "tarif": "hand painted game texture, seamless tileable off-white plaster wall, subtle stains, front view, even lighting, flat",
+      "stil": "other",
+      "adet": 1,
+      "seed": 24,
+      "boyut": [
+        1024,
+        1024
+      ],
+      "cikti": "assets/uretilen/doku_siva.png"
+    },
+    {
+      "ad": "doku_parke",
+      "doku": true,
+      "tarif": "hand painted game texture, seamless tileable warm wooden parquet floor, top-down, even lighting, flat",
+      "stil": "other",
+      "adet": 1,
+      "seed": 25,
+      "boyut": [
+        1024,
+        1024
+      ],
+      "cikti": "assets/uretilen/doku_parke.png"
+    },
+    {
+      "ad": "doku_cati",
+      "doku": true,
+      "tarif": "hand painted game texture, seamless tileable red clay roof tiles in overlapping rows, the whole surface fully covered with tiles, no gaps, no holes, no white areas, top-down, even lighting, flat",
+      "stil": "other",
+      "adet": 1,
+      "seed": 36,
+      "boyut": [
+        1024,
+        1024
+      ],
+      "cikti": "assets/uretilen/doku_cati.png"
+    },
+    {
+      "ad": "doku_yaprak",
+      "doku": true,
+      "tarif": "hand painted game texture, seamless tileable dense green tree leaves foliage, even lighting, flat",
+      "stil": "other",
+      "adet": 1,
+      "seed": 27,
+      "boyut": [
+        1024,
+        1024
+      ],
+      "cikti": "assets/uretilen/doku_yaprak.png"
+    }
   ]
 }

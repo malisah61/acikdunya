@@ -25,6 +25,8 @@ Godot 4.3 + GDScript, GL Compatibility (eski telefonlarda da çalışsın diye).
 - **Yan görev — teyzenin ekmeği**: teyzeler ara sıra bakkaldan ekmek ister; alışverişte ekmeği al, teyzeye götür (+60 TL, itibar)
 - **Mahalle itibarı**: görevler ve iyilikler itibar kazandırır (Yeni gelen → Bilinen yüz → Sevilen komşu → Mahallenin gözdesi)
 - Sakinlerin tipi var (teyze, öğrenci, memur, işçi, kadın): her biri kendi sözü ve sesiyle selam verir
+- **Hava durumu — yağmur**: ara ara 1-3 saatlik yağmur; damlalar, kapalı gök, sis, şimşek ve gök gürültüsü. Sakinler şemsiye açar, şemsiyesizler evine koşar; dışarıda ıslanınca daha çabuk yorulursun. Kahvehaneye girince Rıza Usta çaya çağırır. Panelde hava ikonu, telefonda hava durumu
+- **Yan görevler**: teyzenin ekmeği, **memurun kayıp cüzdanı** (parkta bul, geri ver), **işçinin yemeği** (bakkaldan simit götür); etkin yan görev sol üst panelde ikonuyla görünür
 - Otomatik kayıt (dakikada bir, uyuyunca, nöbet bitince)
 
 ## Kontroller
@@ -58,7 +60,7 @@ Sonra bu depoda Settings → Secrets and variables → Actions → New repositor
 ## Yol haritası
 1. Atölyeden 3D karakter (görsel → 3D → iskelet) ve fotoğraftan sana benzeyen oyuncu modeli
    - [x] 9 karakterin önden boydan görünümü (atölyeden, `assets/uretilen/karakterler/`)
-   - [ ] Görselleri atölyenin 3D hattıyla (TripoSR → model.glb) modele çevirip kutu karakterlerin yerine koymak
+   - [ ] Görselleri atölyenin 3D hattıyla (önce dükkân sahipleri: Hasan, Rıza, Dr. Selin, Ayşe — duran karakterler, iskelet gerekmez) (TripoSR → model.glb) modele çevirip kutu karakterlerin yerine koymak
    - [ ] Oyuncu: `assets/ben/foto.png` yüklenince portre ve görünüm
 2. Yeni bölgeler (çarşı, sahil, sanayi) ve parça parça yüklenen büyük harita
 3. Meslekler ve mini oyunlar (acil nöbeti, taksi, esnaflık), kariyer basamakları
@@ -71,7 +73,8 @@ Sonra bu depoda Settings → Secrets and variables → Actions → New repositor
    - [x] Telefon menüsü (temel: durum, meslekler, ipucu) ve sakinlerin selamlaşması
    - [x] Esnafla dostluk puanı (indirim, bahşiş)
    - [x] Günlük görevler (telefonda), mahalle itibarı, ilk yan görev (teyzenin ekmeği)
-   - [ ] Daha çok yan görev (öğrencinin dersi, memurun kayıp cüzdanı, işçinin yemeği) ve sakinlerle kişisel dostluk
+   - [x] Memurun kayıp cüzdanı, işçinin yemeği (sesli istek ve teşekkür)
+   - [ ] Öğrencinin dersi, sakinlerle kişisel dostluk (adlı sakinler)
 6. Hava durumu, mevsimler, sesler
    - [x] Dikişsiz dokular (asfalt, çimen, kaldırım, parke, sıva, yaprak); çatı ve ekmek ikonu yeniden sipariş bekliyor
    - [x] Ses yöneticisi, efektler, zemine göre adım, gündüz/gece ortam, NPC replikleri, ses ayarı
@@ -79,5 +82,7 @@ Sonra bu depoda Settings → Secrets and variables → Actions → New repositor
    - [ ] Uzaktan kısa ezan (sentezle olmaz; atölye ses sekmesi ya da lisanslı gerçek kayıt bekliyor)
    - [ ] Sprite Atölye ses sekmesinden üretim (hazır olunca sentez seslerin yerine)
    - [x] Daha çok replik (öğrenci, memur, işçi, kadın; teşekkür ve terfi tepkileri)
-   - [ ] Yağmur ortam sesi, görev/terfi seslerinin atölyeden daha iyisi
-   - [ ] Yağmur, rüzgâr; mevsimler
+   - [x] Yağmur ortam sesi ve gök gürültüsü (sentez)
+   - [ ] Görev/terfi seslerinin atölyeden daha iyisi
+   - [x] Yağmur (damlalar, sis, şimşek, şemsiyeli sakinler)
+   - [ ] Islak zemin parlaması ve su birikintileri, rüzgâr, kar; mevsimler

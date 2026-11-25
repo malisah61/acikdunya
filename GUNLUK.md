@@ -27,3 +27,14 @@
 - Görseller (Sprite Atölye, 3 tur): 9 karakter görünümü seçildi (`assets/uretilen/karakterler/`: bakkal Hasan, kahveci Rıza, Dr. Selin, hemşire Ayşe, teyze, öğrenci, memur, işçi, kadın), ikonlar: çay, nöbet, yatak, simit, raf (bakkal mesaisi), tepsi (garsonluk), telefon. Hemşire (anime çıkmıştı), kadın (iki kişi) ve simit (çörek gibi) tarifleri düzeltilip 2. turda yenilendi. Ekmek ikonu kötü çıktı, tarifi düzeltildi.
 - Dokular (ilk kez, dikişsiz): asfalt, çimen, kaldırım, parke, sıva, yaprak — 512 px. Çatı beyaz lekeli çıktı, tarifi düzeltildi; şimdilik düz renk.
 - `assets/ben/foto.png` hâlâ yok: `kisi_oyuncu` ve `oyuncu_portre` atlandı.
+
+## 2026-11-26 (gece çalışması)
+- Yeni: **Hava durumu — yağmur.** Saatte %10 ihtimalle 1-3 saatlik yağmur: damlalar (CPU parçacık, 450 adet, kamerayı izler; içeride kapanır), kapalı gök, hafif sis, ara ara şimşek + gök gürültüsü. Dışarıda ıslanınca yorulma ×1,3. Sakinlerin %70'i şemsiye açıp hızlanıyor, şemsiyesizler evine koşuyor; yağmura özel selam sözleri. Kahvehaneye girince Rıza Usta "Yağmur dinene kadar bir çay içeriz" diyor. Hava kayda yazılır; telefonda hava ve kalan süre.
+- Yeni yan görevler: **memurun kayıp cüzdanı** (parkta parlayan cüzdanı bul, memura ver: +80 TL, itibar +2) ve **işçinin yemeği** (alışverişte ona da simit + ayran al, götür: +50 TL). Teyzenin ekmeği artık sesli istek ve teşekkür.
+- İyileştirme: sol üst panelde hava ikonu ve etkin yan görev satırı (ikonuyla); özel söz varken sakinin olağan selam repliği üst üste binmiyor.
+- Duman testi artık ikinci kez `-- --yagmur --cuzdan` ile yağmur ve cüzdan açıkken çalışıyor.
+- Sesler (10): sentez (`araclar/ses_sentez.py yagmur,gok_gurultusu,cuzdan_bul`): yağmur ortamı (dikişsiz 30 sn), gök gürültüsü, cüzdan bulma; Speko (gpt-4o-mini-tts): memur cüzdan isteği/teşekkür (echo), işçi yemek isteği/teşekkür (onyx), teyze ekmek isteği/teşekkür (shimmer), Rıza yağmur daveti (ash). Toplam ses 2,5 MB.
+- Görseller (Sprite Atölye, 2 sipariş turu): ikon_cuzdan, ikon_ekmek (yeniden), ikon_hava_gunes, ikon_hava_yagmur, ikon_sefertasi (iki aday da çoklu çıktı → tek sefertası kırpıldı), doku_cati (düzeltilmiş tarif, dikişsiz, 2×2 döşemede dikiş yok).
+- 3D karakter: denenemedi — GPU'suz `uc_boyut.yml` (TripoSR) iş akışını tetikleme izni bu oturumda verilmedi (görev yalnız siparis/uret akışlarını kullanıyor); `"hat": "komando"` ise Komando'ya özel iskelet dosyaları istiyor.
+- `asistan/gercekci-karakterler` dalında karakter tariflerini fotogerçekçiye çeviren birleştirilmemiş değişiklikler var; main'e alınmadı (kullanıcı kararı bekliyor).
+- `assets/ben/foto.png` hâlâ yok: `kisi_oyuncu` ve `oyuncu_portre` atlandı.
