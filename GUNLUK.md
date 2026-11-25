@@ -10,3 +10,10 @@
 ## 2026-11-25 (gündüz, elle başlatılan tur)
 - Görseller: yine sipariş verilemedi — oturumun `sprite-atolye` deposuna erişimi yok, `ATOLYE_TOKEN` hâlâ tanımlı değil. Doku siparişleri (`siparis_doku.json`, 7 doku, hepsi `"doku": true`) hazır bekliyor; `siparis.py` eki atölyeye erişim gelince yapılacak.
 - Yeni: Kahvehanede garsonluk (3 saat; Çaycı Çırağı → Garson → Ocakbaşı Ustası, 110 → 200 TL).
+
+## 2026-11-25 (gece çalışması, 2. tur) — sesler
+- Yeni: `betikler/ses.gd` (autoload `Ses`). Efekt havuzu (6 düz + 6 konumlu), replik oynatıcı (kişi başına 25 sn'de bir), gündüz/gece ortam sesi (içeride kısılır, yumuşak geçiş), müzik katmanı (dosya gelince çalar), ses düzeyleri `user://ayarlar.json`'a yazılır. Dosya yoksa sessiz.
+- Sesler bağlandı: zemine göre adım (asfalt/kaldırım/otopark, çim, bina içi), bina kapısı, bakkal zili, kasa (alışveriş ve maaş), simit yeme, çay kaşığı, düğme tıklaması, bildirim. Esnaf bölgesine girince selam repliği; hastaneye girince Hemşire Ayşe karşılıyor; uzun saçlı bazı sakinler "teyze" olarak sesli selam veriyor.
+- Yeni: Esnafla dostluk (Tanıdık → Ahbap 5 → Dost 15): ahbapta simit 20 TL / çay 8 TL, dostta mesaide %10 bahşiş. Telefonda "Dostlar" bölümü ve ses ayarı kaydırıcıları. Kayda yazılır.
+- Ses dosyaları (17, ~0,6 MB): 10 efekt + 2 ortam koddan sentez; 5 Türkçe replik Speko (gpt-4o-mini-tts). Liste: `assets/siparis_ses.json`, lisanslar: `assets/ses/LISANSLAR.md`. CC0 siteleri ağ engeline takıldı.
+- Görseller: yine sipariş verilemedi — `ATOLYE_TOKEN` secret'ı tanımlı değil ve oturumun `sprite-atolye` deposuna erişimi yok. `assets/ben/foto.png` yok.

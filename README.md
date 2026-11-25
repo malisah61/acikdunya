@@ -19,6 +19,8 @@ Godot 4.3 + GDScript, GL Compatibility (eski telefonlarda da çalışsın diye).
 - Gece-gündüz döngüsü (24 dakikada bir gün): gün batımı, lambalar ve pencereler gece yanar
 - Tokluk / enerji / para; enerji biterse bayılırsın
 - Gündüz dolaşıp gece evine dönen 24 mahalle sakini
+- **Esnafla dostluk**: Bakkal Hasan, Kahveci Rıza ve Dr. Selin'le her alışveriş/mesai dostluğu artırır (Tanıdık → Ahbap → Dost); ahbap olunca simit/çay indirimli, dost olunca mesaide %10 bahşiş. Telefonda "Dostlar" bölümü
+- **Sesler**: zemine göre adım (asfalt/çim/ev içi), kapı, bakkal zili, kasa, yeme, çay kaşığı, arayüz tıklama, bildirim; gündüz/gece mahalle ortam sesi (içeride kısılır, yumuşak geçiş); esnaf ve teyzelerin sesli selamı; telefonda efekt ve ortam/müzik ses ayarı
 - Otomatik kayıt (dakikada bir, uyuyunca, nöbet bitince)
 
 ## Kontroller
@@ -31,6 +33,7 @@ Oyunun görselleri [Sprite Atölye](https://github.com/malisah61/sprite-atolye)'
 | Dosya | Ne | Oyunda nerede |
 |---|---|---|
 | `assets/siparis.json` | portre, ikonlar ve 10 karakterin boydan görünümü (`kisi_*`) | sol üst panel, eylem düğmesi, esnafla konuşunca kişi kartı |
+| `assets/siparis_ses.json` | oyunun ses listesi (efekt, ortam, müzik, replik) → `assets/ses/<tur>/<ad>.ogg` | `betikler/ses.gd` (autoload `Ses`), dosya yoksa sessiz |
 | `assets/siparis_doku.json` | dikişsiz dokular (çimen, asfalt, kaldırım, sıva, parke, çatı, yaprak) | tüm dünya |
 
 Sipariş vermek için: bu depoda Actions → **Atölyeye sipariş ver** (ya da `assets/siparis.json` değişince kendiliğinden başlar).
@@ -45,6 +48,7 @@ Sonra bu depoda Settings → Secrets and variables → Actions → New repositor
 
 ## Telefon performansı notları
 - Çok tekrar eden nesneler (pencereler, kapılar, şerit çizgileri, lamba direkleri ve başlıkları) `Dunya.toplu` / `toplu_mesh` ile tek çizimde.
+- Ses: en fazla 6 düz + 6 konumlu efekt ve 1 replik aynı anda; ortam sesleri kısıkken durdurulur. Toplam ses boyutu ≤ 25 MB.
 - Gece yalnız oyuncuya en yakın 8 sokak lambası gerçek ışık yayar; diğerlerinin başlığı sadece parlar.
 
 ## Yol haritası
@@ -58,5 +62,11 @@ Sonra bu depoda Settings → Secrets and variables → Actions → New repositor
 4. Ev kiralama/satın alma, eşyalar, araba kullanma
 5. Komşularla ilişki, yan görevler, telefon menüsü
    - [x] Telefon menüsü (temel: durum, meslekler, ipucu) ve sakinlerin selamlaşması
-   - [ ] Komşularla dostluk puanı, yan görevler (telefondan)
+   - [x] Esnafla dostluk puanı (indirim, bahşiş)
+   - [ ] Sakinlerle dostluk, yan görevler (telefondan)
 6. Hava durumu, mevsimler, sesler
+   - [x] Ses yöneticisi, efektler, zemine göre adım, gündüz/gece ortam, NPC replikleri, ses ayarı
+   - [ ] Kahvehane ve hastane iç ortam sesi, uzaktan kısa ezan, mahalle ve gece müziği (`siparis_ses.json`'da bekliyor)
+   - [ ] Sprite Atölye ses sekmesinden üretim (hazır olunca sentez seslerin yerine)
+   - [ ] Daha çok replik (öğrenci, memur, işçi; terfi/teşekkür tepkileri)
+   - [ ] Yağmur, rüzgâr; mevsimler

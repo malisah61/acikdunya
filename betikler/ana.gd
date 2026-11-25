@@ -50,8 +50,8 @@ func _ready() -> void:
 		b.body_entered.connect(_bolgeye_girdi.bind(b))
 		b.body_exited.connect(_bolgeden_cikti.bind(b))
 	for a in bilgi["ic_mekanlar"]:
-		a.oyuncu_girdi.connect(func() -> void: kamera.ic_mekan += 1)
-		a.oyuncu_cikti.connect(func() -> void: kamera.ic_mekan = maxi(0, kamera.ic_mekan - 1))
+		a.oyuncu_girdi.connect(_ice_girdi.bind(a))
+		a.oyuncu_cikti.connect(_disari_cikti.bind(a))
 	Oyun.bayildi.connect(_bayildi)
 
 
@@ -113,9 +113,27 @@ func _unhandled_input(e: InputEvent) -> void:
 		_eylem()
 
 
+func _ice_girdi(a) -> void:
+	kamera.ic_mekan += 1
+	Ses.ic_mekan += 1
+	var kapi: Vector3 = a.global_position
+	Ses.cal("kapi", kapi)
+	if a.ad == "BAKKAL":
+		Ses.cal("bakkal_zili", kapi, 0.0)
+	elif a.ad == "HASTANE":
+		Ses.replik("hemsire_ayse", kapi + Vector3(1.2, 1.5, -3.0))
+
+
+func _disari_cikti(a) -> void:
+	kamera.ic_mekan = maxi(0, kamera.ic_mekan - 1)
+	Ses.ic_mekan = maxi(0, Ses.ic_mekan - 1)
+	Ses.cal("kapi", a.global_position)
+
+
 func _bolgeye_girdi(body: Node3D, b) -> void:
 	if body == oyuncu:
 		aktif_bolgeler.append(b)
+		Ses.replik(b.kisi, b.global_position)
 		hud.eylem_goster(b.eylem, Oyun.eylem_metni(b.eylem, b.metin), b.kisi, b.kisi_ad)
 
 

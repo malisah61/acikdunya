@@ -12,6 +12,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Oyun="*res://betikler/oyun.gd"
+Ses="*res://betikler/ses.gd"
 
 [display]
 

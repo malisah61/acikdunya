@@ -2,6 +2,7 @@ extends CharacterBody3D
 ## Oyuncu: klavye (WASD / oklar, Shift koşu) veya dokunmatik joystick ile yürür.
 
 const Karakter := preload("res://betikler/karakter.gd")
+const Dunya := preload("res://betikler/dunya.gd")
 const YURUME := 4.5
 const KOSMA := 7.5
 
@@ -10,6 +11,7 @@ var model: Node3D
 var etiket: Label3D
 var _faz := 0.0
 var _salinim := 0.0
+var _adim_sayi := 0
 
 
 func _ready() -> void:
@@ -80,4 +82,21 @@ func _physics_process(delta: float) -> void:
 	if hareket:
 		model.rotation.y = lerp_angle(model.rotation.y, atan2(yon.x, yon.z), clampf(12.0 * delta, 0.0, 1.0))
 		_faz += delta * hiz * 2.2 * g.length()
+		var n := int(_faz / PI)
+		if n != _adim_sayi:
+			_adim_sayi = n
+			Ses.adim(_zemin(), global_position, hiz > YURUME)
 	Karakter.yuru(model, _faz, _salinim)
+
+
+## Ayağın altındaki zemin: bina içi, yol/kaldırım/otopark ya da çimen.
+func _zemin() -> String:
+	if Ses.ic_mekan > 0:
+		return "ev"
+	var p := global_position
+	for r in Dunya.YOLLAR:
+		if absf(p.x - r) < Dunya.YOL_EN / 2.0 + 2.0 or absf(p.z - r) < Dunya.YOL_EN / 2.0 + 2.0:
+			return "asfalt"
+	if p.x > 10.0 and p.x < 50.0 and p.z > 9.0 and p.z < 33.0:
+		return "asfalt"
+	return "cim"

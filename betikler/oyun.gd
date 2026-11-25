@@ -24,6 +24,12 @@ const MESLEKLER := {
 		"basamak": [["Çaycı Çırağı", 0, 110], ["Garson", 4, 150], ["Ocakbaşı Ustası", 10, 200]]},
 }
 
+## Esnafla dostluk: her alışveriş/mesai +1 puan. [ad, gereken puan]
+const DOSTLUK_SEVIYELERI := [["Tanıdık", 0], ["Ahbap", 5], ["Dost", 15]]
+const ESNAF := {"bakkal_hasan": "Bakkal Hasan Amca", "kahveci_riza": "Kahveci Rıza Usta", "doktor_selin": "Dr. Selin"}
+## Hangi eylem hangi esnafla yapılır
+const EYLEM_ESNAF := {"simit": "bakkal_hasan", "bakkal_is": "bakkal_hasan", "cay": "kahveci_riza", "garson": "kahveci_riza", "nobet": "doktor_selin"}
+
 var gun := 1
 var dakika := 8.0 * 60.0
 var para := 250
@@ -38,6 +44,7 @@ var duraklat := false
 var _kayit_sayaci := 0.0
 ## Her meslekte tamamlanan iş sayısı (kariyer basamağını belirler)
 var is_sayilari := {"nobet": 0, "bakkal_is": 0, "garson": 0}
+var dostluk := {"bakkal_hasan": 0, "kahveci_riza": 0, "doktor_selin": 0}
 var _ac_uyarildi := false
 var _yorgun_uyarildi := false
 
@@ -136,22 +143,27 @@ func eylem(ad: String) -> bool:
 			kaydet()
 			return true
 		"simit":
-			if para < 25:
+			var f := fiyat("simit")
+			if para < f:
 				mesaj.emit("Paran yetmiyor! Hastanede nöbet tutarak para kazanabilirsin.")
 				return false
-			para -= 25
+			para -= f
 			tokluk = minf(tokluk + 35.0, 100.0)
 			ilerle(10.0)
-			mesaj.emit("Simit ve ayran aldın. Afiyet olsun! (-25 TL)")
+			Ses.cal("kasa_para")
+			Ses.cal("yeme", null, 0.05, -2.0)
+			mesaj.emit("Simit ve ayran aldın. Afiyet olsun! (-%d TL)%s" % [f, _dost_artir("bakkal_hasan")])
 			return false
 		"cay":
-			if para < 10:
+			var f := fiyat("cay")
+			if para < f:
 				mesaj.emit("Çaya bile paran yok!")
 				return false
-			para -= 10
+			para -= f
 			enerji = minf(enerji + 12.0, 100.0)
 			ilerle(20.0)
-			mesaj.emit("Bir çay içtin, açıldın. (-10 TL)")
+			Ses.cal("cay_kasik")
+			mesaj.emit("Bir çay içtin, açıldın. (-%d TL)%s" % [f, _dost_artir("kahveci_riza")])
 			return false
 		"nobet", "bakkal_is", "garson":
 			return _calis(ad)
@@ -177,12 +189,21 @@ func _calis(meslek: String) -> bool:
 	var b: Array = m["basamak"]
 	var once := basamak(meslek)
 	var ucret := int(b[once][2])
+	var esnaf: String = EYLEM_ESNAF.get(meslek, "")
+	var bahsis := 0
+	if dostluk_seviye(esnaf) >= 2:
+		bahsis = int(ucret * 0.1)
+	ucret += bahsis
 	var saat := int(m["saat"])
 	ilerle(saat * 60.0)
 	para += ucret
 	is_sayilari[meslek] = int(is_sayilari.get(meslek, 0)) + 1
 	var sonra := basamak(meslek)
+	Ses.cal("kasa_para")
 	var metin: String = "%s bitti! %d saat çalıştın. (+%d TL)" % [m["bitti"], saat, ucret]
+	if bahsis > 0:
+		metin += "\n%s dostun olduğu için %d TL fazladan verdi." % [ESNAF[esnaf], bahsis]
+	metin += _dost_artir(esnaf)
 	if sonra > once:
 		metin += "\nTERFİ! Yeni unvanın: %s (iş başı %d TL)" % [b[sonra][0], int(b[sonra][2])]
 	mesaj.emit(metin)
@@ -190,8 +211,51 @@ func _calis(meslek: String) -> bool:
 	return true
 
 
+## Esnafla dostluk seviyesi: 0 Tanıdık, 1 Ahbap, 2 Dost.
+func dostluk_seviye(kisi: String) -> int:
+	var n := int(dostluk.get(kisi, 0))
+	var i := 0
+	for k in DOSTLUK_SEVIYELERI.size():
+		if n >= int(DOSTLUK_SEVIYELERI[k][1]):
+			i = k
+	return i
+
+
+## Dostluk puanını artırır; seviye atladıysa mesaja eklenecek satırı döndürür.
+func _dost_artir(kisi: String) -> String:
+	if not dostluk.has(kisi):
+		return ""
+	var once := dostluk_seviye(kisi)
+	dostluk[kisi] = int(dostluk[kisi]) + 1
+	var sonra := dostluk_seviye(kisi)
+	if sonra > once:
+		var ek := ""
+		if kisi == "bakkal_hasan":
+			ek = " Simit artık daha ucuz!" if sonra == 1 else " İşte bahşiş de verecek."
+		elif kisi == "kahveci_riza":
+			ek = " Çay artık daha ucuz!" if sonra == 1 else " İşte bahşiş de verecek."
+		elif sonra == 2:
+			ek = " Nöbette fazladan ödeme yapacak."
+		return "\n%s ile artık %s oldunuz!%s" % [ESNAF[kisi], DOSTLUK_SEVIYELERI[sonra][0].to_lower(), ek]
+	return ""
+
+
+## Alışveriş fiyatı (esnafla ahbap olunca indirimli).
+func fiyat(ad: String) -> int:
+	match ad:
+		"simit":
+			return 20 if dostluk_seviye("bakkal_hasan") >= 1 else 25
+		"cay":
+			return 8 if dostluk_seviye("kahveci_riza") >= 1 else 10
+	return 0
+
+
 ## Eylem düğmesinin yazısı (meslek eylemlerinde güncel ücret ve unvan).
 func eylem_metni(ad: String, varsayilan: String) -> String:
+	if ad == "simit":
+		return "Simit + ayran al (%d TL)" % fiyat("simit")
+	if ad == "cay":
+		return "Çay iç (%d TL)" % fiyat("cay")
 	if not MESLEKLER.has(ad):
 		return varsayilan
 	var m: Dictionary = MESLEKLER[ad]
@@ -212,6 +276,14 @@ func telefon_metni() -> String:
 			s += "     %s olmak için %d iş daha\n" % [b[i + 1][0], int(b[i + 1][1]) - n]
 		else:
 			s += "     En üst basamaktasın!\n"
+	s += "\nDOSTLAR\n"
+	for k in ESNAF:
+		var n := int(dostluk.get(k, 0))
+		var i := dostluk_seviye(k)
+		s += "• %s: %s (%d puan)" % [ESNAF[k], DOSTLUK_SEVIYELERI[i][0], n]
+		if i + 1 < DOSTLUK_SEVIYELERI.size():
+			s += " — %s için %d daha" % [DOSTLUK_SEVIYELERI[i + 1][0], int(DOSTLUK_SEVIYELERI[i + 1][1]) - n]
+		s += "\n"
 	s += "\nİPUCU\n"
 	if tokluk < 30.0:
 		s += "Karnın aç: bakkalda simit + ayran 25 TL."
@@ -229,7 +301,7 @@ func telefon_metni() -> String:
 func kaydet() -> void:
 	var veri := {
 		"gun": gun, "dakika": dakika, "para": para, "tokluk": tokluk, "enerji": enerji,
-		"karakter": karakter, "karakter_hazir": karakter_hazir, "is_sayilari": is_sayilari,
+		"karakter": karakter, "karakter_hazir": karakter_hazir, "is_sayilari": is_sayilari, "dostluk": dostluk,
 		"konum": [oyuncu_konum.x, oyuncu_konum.y, oyuncu_konum.z],
 	}
 	var f := FileAccess.open(KAYIT_YOLU, FileAccess.WRITE)
@@ -266,6 +338,11 @@ func yukle() -> void:
 		for a in is_sayilari.keys():
 			if isler.has(a):
 				is_sayilari[a] = int(isler[a])
+	var dost = v.get("dostluk", {})
+	if typeof(dost) == TYPE_DICTIONARY:
+		for a in dostluk.keys():
+			if dost.has(a):
+				dostluk[a] = int(dost[a])
 	var p = v.get("konum", null)
 	if p is Array and p.size() == 3:
 		oyuncu_konum = Vector3(float(p[0]), float(p[1]), float(p[2]))

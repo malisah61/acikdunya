@@ -1,0 +1,173 @@
+[
+ {
+  "ad": "adim_asfalt",
+  "tur": "efekt",
+  "tarif": "single footstep on asphalt sidewalk, sneaker, close",
+  "sure": 0.3,
+  "cikti": "assets/ses/efekt/adim_asfalt.ogg"
+ },
+ {
+  "ad": "adim_cim",
+  "tur": "efekt",
+  "tarif": "single footstep on grass, soft rustle",
+  "sure": 0.3,
+  "cikti": "assets/ses/efekt/adim_cim.ogg"
+ },
+ {
+  "ad": "adim_ev",
+  "tur": "efekt",
+  "tarif": "single footstep on wooden parquet floor indoors",
+  "sure": 0.3,
+  "cikti": "assets/ses/efekt/adim_ev.ogg"
+ },
+ {
+  "ad": "kapi",
+  "tur": "efekt",
+  "tarif": "wooden shop door opening with slight creak then closing thud",
+  "sure": 1.0,
+  "cikti": "assets/ses/efekt/kapi.ogg"
+ },
+ {
+  "ad": "bakkal_zili",
+  "tur": "efekt",
+  "tarif": "small brass shop door bell jingle when door opens",
+  "sure": 1.5,
+  "cikti": "assets/ses/efekt/bakkal_zili.ogg"
+ },
+ {
+  "ad": "kasa_para",
+  "tur": "efekt",
+  "tarif": "cash register ding with coins dropping on counter",
+  "sure": 1.0,
+  "cikti": "assets/ses/efekt/kasa_para.ogg"
+ },
+ {
+  "ad": "yeme",
+  "tur": "efekt",
+  "tarif": "biting and chewing a crunchy sesame bagel (simit)",
+  "sure": 1.2,
+  "cikti": "assets/ses/efekt/yeme.ogg"
+ },
+ {
+  "ad": "cay_kasik",
+  "tur": "efekt",
+  "tarif": "small spoon stirring and clinking in a Turkish tulip tea glass",
+  "sure": 1.0,
+  "cikti": "assets/ses/efekt/cay_kasik.ogg"
+ },
+ {
+  "ad": "tiklama",
+  "tur": "efekt",
+  "tarif": "soft short UI button click",
+  "sure": 0.1,
+  "cikti": "assets/ses/efekt/tiklama.ogg"
+ },
+ {
+  "ad": "bildirim",
+  "tur": "efekt",
+  "tarif": "gentle two-tone phone notification chime",
+  "sure": 0.9,
+  "cikti": "assets/ses/efekt/bildirim.ogg"
+ },
+ {
+  "ad": "uyuma",
+  "tur": "efekt",
+  "tarif": "person lying down on bed with sheets rustle and a relaxed yawn",
+  "sure": 2.0,
+  "cikti": "assets/ses/efekt/uyuma.ogg"
+ },
+ {
+  "ad": "mahalle_gunduz",
+  "tur": "ortam",
+  "tarif": "calm residential neighborhood daytime ambience, birds chirping, distant traffic, distant children playing, seamless loop",
+  "sure": 30,
+  "cikti": "assets/ses/ortam/mahalle_gunduz.ogg"
+ },
+ {
+  "ad": "gece",
+  "tur": "ortam",
+  "tarif": "quiet neighborhood at night, crickets, occasional distant dog bark, seamless loop",
+  "sure": 30,
+  "cikti": "assets/ses/ortam/gece.ogg"
+ },
+ {
+  "ad": "kahvehane",
+  "tur": "ortam",
+  "tarif": "Turkish coffeehouse interior ambience, backgammon dice and checkers clacking, low murmur of men chatting, tea glasses clinking, seamless loop",
+  "sure": 30,
+  "cikti": "assets/ses/ortam/kahvehane.ogg"
+ },
+ {
+  "ad": "hastane",
+  "tur": "ortam",
+  "tarif": "hospital interior ambience, quiet corridor, soft footsteps, distant beeping monitor, muffled announcements, seamless loop",
+  "sure": 30,
+  "cikti": "assets/ses/ortam/hastane.ogg"
+ },
+ {
+  "ad": "ezan_uzak",
+  "tur": "ortam",
+  "tarif": "distant call to prayer heard faintly across a city neighborhood, respectful, low volume, short excerpt",
+  "sure": 20,
+  "cikti": "assets/ses/ortam/ezan_uzak.ogg"
+ },
+ {
+  "ad": "mahalle",
+  "tur": "muzik",
+  "tarif": "calm cheerful acoustic neighborhood theme, saz and guitar, light percussion, seamless loop",
+  "sure": 60,
+  "cikti": "assets/ses/muzik/mahalle.ogg"
+ },
+ {
+  "ad": "gece",
+  "tur": "muzik",
+  "tarif": "soft relaxing night music, gentle piano and ney flute, slow, seamless loop",
+  "sure": 60,
+  "cikti": "assets/ses/muzik/gece.ogg"
+ },
+ {
+  "ad": "bakkal_hasan_selam",
+  "tur": "replik",
+  "tarif": "warm elderly grocer",
+  "metin": "Hoş geldin evlat! Ne lazım?",
+  "ses": "onyx",
+  "sure": 6,
+  "cikti": "assets/ses/replik/bakkal_hasan_selam.ogg"
+ },
+ {
+  "ad": "kahveci_riza_selam",
+  "tur": "replik",
+  "tarif": "friendly teahouse owner",
+  "metin": "Buyur ağabey, çayın taze demlendi!",
+  "ses": "echo",
+  "sure": 6,
+  "cikti": "assets/ses/replik/kahveci_riza_selam.ogg"
+ },
+ {
+  "ad": "doktor_selin_selam",
+  "tur": "replik",
+  "tarif": "calm kind doctor",
+  "metin": "Merhaba, ben Doktor Selin. Nasıl hissediyorsunuz?",
+  "ses": "nova",
+  "sure": 6,
+  "cikti": "assets/ses/replik/doktor_selin_selam.ogg"
+ },
+ {
+  "ad": "hemsire_ayse_selam",
+  "tur": "replik",
+  "tarif": "gentle nurse",
+  "metin": "Geçmiş olsun! Sıranızı alın, doktor hanım birazdan gelecek.",
+  "ses": "shimmer",
+  "sure": 6,
+  "cikti": "assets/ses/replik/hemsire_ayse_selam.ogg"
+ },
+ {
+  "ad": "sakin_teyze_selam",
+  "tur": "replik",
+  "tarif": "affectionate elderly auntie",
+  "metin": "Aman evladım, hoş geldin! Maşallah, ne güzel olmuşsun.",
+  "ses": "fable",
+  "sure": 6,
+  "cikti": "assets/ses/replik/sakin_teyze_selam.ogg"
+ }
+]

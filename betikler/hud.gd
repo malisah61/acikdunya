@@ -156,6 +156,7 @@ func _dugme(ebeveyn: Control, yazi: String, boyut: Vector2) -> Button:
 	b.custom_minimum_size = boyut
 	b.add_theme_font_size_override("font_size", 22)
 	b.focus_mode = Control.FOCUS_NONE
+	b.pressed.connect(func() -> void: Ses.cal("tiklama", null, 0.03, -6.0))
 	ebeveyn.add_child(b)
 	return b
 
@@ -204,6 +205,8 @@ func _process(delta: float) -> void:
 
 
 func mesaj_goster(metin: String) -> void:
+	if not metin.contains("TL)"):
+		Ses.cal("bildirim", null, 0.0, -4.0)
 	mesaj_etiket.text = metin
 	_mesaj_sure = 4.0
 	mesaj_etiket.modulate.a = 1.0
@@ -358,12 +361,34 @@ func _telefon_kur(kok: Control) -> void:
 	telefon_yazi = _etiket(vb, 19)
 	telefon_yazi.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	telefon_yazi.custom_minimum_size.x = 388
+	_ses_kaydirici(vb, "Efekt sesi", Ses.efekt_duzey, func(v: float) -> void: Ses.duzey_ayarla(v, Ses.muzik_duzey))
+	_ses_kaydirici(vb, "Ortam / müzik", Ses.muzik_duzey, func(v: float) -> void: Ses.duzey_ayarla(Ses.efekt_duzey, v))
 	var kapat := _dugme(vb, "Kapat", Vector2(200, 56))
 	kapat.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	kapat.pressed.connect(func() -> void:
 		telefon_paneli.visible = false
 		Oyun.duraklat = false
 	)
+
+
+## Telefondaki ses ayarı satırı (0..1 kaydırıcı; değer user://ayarlar.json'a yazılır).
+func _ses_kaydirici(vb: VBoxContainer, yazi: String, deger: float, degisti: Callable) -> void:
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 12)
+	vb.add_child(hb)
+	var l := _etiket(hb, 19)
+	l.text = yazi
+	l.custom_minimum_size.x = 150
+	var k := HSlider.new()
+	k.min_value = 0.0
+	k.max_value = 1.0
+	k.step = 0.05
+	k.value = deger
+	k.custom_minimum_size = Vector2(220, 40)
+	k.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	k.focus_mode = Control.FOCUS_NONE
+	k.value_changed.connect(degisti)
+	hb.add_child(k)
 
 
 func telefon_ac() -> void:

@@ -5,6 +5,8 @@ signal oyuncu_girdi
 signal oyuncu_cikti
 
 var gizlenecekler: Array = []
+## Binanın adı (tabela; ev için boş) — kapı/zil/karşılama sesleri için
+var ad := ""
 
 
 func _ready() -> void:

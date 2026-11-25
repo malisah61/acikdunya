@@ -194,6 +194,7 @@ static func bina(kok: Node3D, merkez: Vector3, w: float, d: float, h: float, duv
 	cs.position.y = h / 2
 	a.add_child(cs)
 	a.gizlenecekler = on + [cati]
+	a.ad = tabela
 	n.add_child(a)
 	sonuc["ic_mekanlar"].append(a)
 	return n
