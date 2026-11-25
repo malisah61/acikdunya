@@ -386,6 +386,7 @@ static func kur(kok: Node3D) -> Dictionary:
 	sabit_kisi(kahve, Vector3(-4.9, 0, -1), Color(0.4, 0.3, 0.25), rng)
 	sabit_kisi(kahve, Vector3(0.9, 0, 2.5), Color(0.3, 0.35, 0.5), rng)
 	bolge(kahve, Vector3(4.5, 1, -2.0), Vector3(4.0, 2, 1.8), "cay", "Çay iç (10 TL)", sonuc, "kahveci_riza", "Kahveci Rıza Usta")
+	bolge(kahve, Vector3(4.5, 1, 2.5), Vector3(2.4, 2, 2.0), "garson", "Garsonluk yap", sonuc, "kahveci_riza", "Kahveci Rıza Usta")
 	yuruyus_yolu(kok, -30, 51, 53)
 	apartman(kok, Vector3(-47, 0, 46), 8, 9, 6, Color(0.9, 0.82, 0.7), sonuc)
 	apartman(kok, Vector3(-13, 0, 46), 10, 9, 9, Color(0.78, 0.8, 0.72), sonuc)

@@ -11,8 +11,8 @@ Godot 4.3 + GDScript, GL Compatibility (eski telefonlarda da çalışsın diye).
 ## Şu an oyunda (v0.1 — ilk mahalle)
 - Karakter oluşturma ("Kendini oyuna ekle"): isim, ten, saç rengi/modeli, sakal, gömlek, pantolon
 - Mahalle: 3×3 yol ağı, kaldırımlar, sokak lambaları, park + havuz, otopark, apartmanlar
-- İçine girilen binalar (girince çatı ve ön duvar kalkar): **Ev** (uyu), **Bakkal** (simit + ayran, raf dizme mesaisi), **Kahvehane** (çay), **Hastane** (8 saatlik nöbet → para)
-- Meslekler ve kariyer basamakları: Hastane (Stajyer → Hemşire → Asistan Doktor → Uzman Doktor), Bakkal (Çırak → Tezgâhtar → Kalfa); çalıştıkça terfi, terfiyle daha yüksek ücret
+- İçine girilen binalar (girince çatı ve ön duvar kalkar): **Ev** (uyu), **Bakkal** (simit + ayran, raf dizme mesaisi), **Kahvehane** (çay, garsonluk), **Hastane** (8 saatlik nöbet → para)
+- Meslekler ve kariyer basamakları: Hastane (Stajyer → Hemşire → Asistan Doktor → Uzman Doktor), Bakkal (Çırak → Tezgâhtar → Kalfa), Kahvehane (Çaycı Çırağı → Garson → Ocakbaşı Ustası); çalıştıkça terfi, terfiyle daha yüksek ücret
 - **Telefon** menüsü: saat, para, meslekler, terfiye kalan iş sayısı, duruma göre ipucu
 - Mahalle sakinleri yanından geçince durup selam verir ("Günaydın!", "Kolay gelsin!"…)
 - Acıkınca / yorulunca uyarı mesajı ve yanıp sönen kırmızı çubuk
@@ -52,7 +52,8 @@ Sonra bu depoda Settings → Secrets and variables → Actions → New repositor
 2. Yeni bölgeler (çarşı, sahil, sanayi) ve parça parça yüklenen büyük harita
 3. Meslekler ve mini oyunlar (acil nöbeti, taksi, esnaflık), kariyer basamakları
    - [x] Kariyer basamakları (hastane, bakkal) ve bakkalda mesai
-   - [ ] Kahvehanede garsonluk, taksi şoförlüğü
+   - [x] Kahvehanede garsonluk
+   - [ ] Taksi şoförlüğü
    - [ ] İş başında küçük mini oyunlar (acil nöbetinde hasta sırası, rafları doğru dizme)
 4. Ev kiralama/satın alma, eşyalar, araba kullanma
 5. Komşularla ilişki, yan görevler, telefon menüsü

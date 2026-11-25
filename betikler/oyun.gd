@@ -20,6 +20,8 @@ const MESLEKLER := {
 		"basamak": [["Stajyer", 0, 400], ["Hemşire", 3, 480], ["Asistan Doktor", 8, 600], ["Uzman Doktor", 15, 800]]},
 	"bakkal_is": {"ad": "Bakkal", "is": "Rafları diz", "bitti": "Mesai", "saat": 4, "enerji": 30,
 		"basamak": [["Çırak", 0, 150], ["Tezgâhtar", 4, 200], ["Kalfa", 10, 260]]},
+	"garson": {"ad": "Kahvehane", "is": "Garsonluk yap", "bitti": "Mesai", "saat": 3, "enerji": 25,
+		"basamak": [["Çaycı Çırağı", 0, 110], ["Garson", 4, 150], ["Ocakbaşı Ustası", 10, 200]]},
 }
 
 var gun := 1
@@ -35,7 +37,7 @@ var konum_kayitli := false
 var duraklat := false
 var _kayit_sayaci := 0.0
 ## Her meslekte tamamlanan iş sayısı (kariyer basamağını belirler)
-var is_sayilari := {"nobet": 0, "bakkal_is": 0}
+var is_sayilari := {"nobet": 0, "bakkal_is": 0, "garson": 0}
 var _ac_uyarildi := false
 var _yorgun_uyarildi := false
 
@@ -151,7 +153,7 @@ func eylem(ad: String) -> bool:
 			ilerle(20.0)
 			mesaj.emit("Bir çay içtin, açıldın. (-10 TL)")
 			return false
-		"nobet", "bakkal_is":
+		"nobet", "bakkal_is", "garson":
 			return _calis(ad)
 	return false
 
@@ -216,7 +218,7 @@ func telefon_metni() -> String:
 	elif enerji < 30.0:
 		s += "Yorgunsun: evde uyu ya da kahvehanede çay iç."
 	elif para < 50:
-		s += "Para azaldı: hastanede nöbet ya da bakkalda mesai."
+		s += "Para azaldı: hastanede nöbet, bakkalda ya da kahvehanede mesai."
 	elif gece_mi():
 		s += "Gece oldu, sakinler evlerine çekildi. Uyumak için iyi bir saat."
 	else:
