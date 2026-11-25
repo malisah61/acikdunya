@@ -17,11 +17,11 @@
   },
   {
    "ad": "ikon_simit",
-   "tarif": "turkish simit, round sesame bread ring, game item icon, cartoon, single object",
+   "tarif": "turkish simit, thin circular braided bread ring densely covered with toasted sesame seeds, golden brown crust, no icing, no sprinkles, not a donut, game item icon, cartoon, single object",
    "tur": "esya",
    "stil": "cartoon",
    "adet": 2,
-   "seed": 11,
+   "seed": 12,
    "boyut": [
     512,
     512
@@ -123,11 +123,11 @@
   },
   {
    "ad": "kisi_hemsire_ayse",
-   "tarif": "young female nurse, light blue nurse uniform, ponytail, white sneakers, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tarif": "adult female nurse in her late twenties, light blue scrubs uniform with short sleeves, brown ponytail, white sneakers, full body from head to feet, 3D cartoon render style like a stylized mobile game character, realistic proportions, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
    "tur": "karakter",
    "stil": "cartoon",
    "adet": 2,
-   "seed": 104,
+   "seed": 114,
    "boyut": [
     768,
     1024
@@ -188,11 +188,11 @@
   },
   {
    "ad": "kisi_sakin_kadin",
-   "tarif": "woman in her thirties, long brown hair, denim jacket, long skirt, ankle boots, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tarif": "one woman in her thirties, long brown hair, denim jacket, long skirt, ankle boots, full body from head to feet, 3D cartoon render style, standing in a T-pose with both arms stretched straight out horizontally to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character, only one person",
    "tur": "karakter",
    "stil": "cartoon",
    "adet": 2,
-   "seed": 109,
+   "seed": 119,
    "boyut": [
     768,
     1024
