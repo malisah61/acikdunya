@@ -26,10 +26,12 @@ Oyunun görselleri [Sprite Atölye](https://github.com/malisah61/sprite-atolye)'
 
 | Dosya | Ne | Oyunda nerede |
 |---|---|---|
-| `assets/siparis.json` | portre + ikonlar | sol üst panel, eylem düğmesi |
+| `assets/siparis.json` | portre, ikonlar ve 10 karakterin boydan görünümü (`kisi_*`) | sol üst panel, eylem düğmesi, esnafla konuşunca kişi kartı |
 | `assets/siparis_doku.json` | dikişsiz dokular (çimen, asfalt, kaldırım, sıva, parke, çatı, yaprak) | tüm dünya |
 
 Sipariş vermek için: sprite-atolye → Actions → **Sipariş** → hedef `malisah61/acikdunya`, dosya `assets/siparis.json`.
+
+**Karakterler:** `kisi_*` siparişleri önden, T-pozda, boydan çizim üretir (`assets/uretilen/karakterler/`). Bunlar şimdi kişi kartında görünür; sonraki adımda atölyenin 3D hattıyla (görsel → 3D → iskelet) oyundaki modellere dönüşecek. Sadece karakterler için: `sadece` alanına `kisi_oyuncu,kisi_bakkal_hasan,...` yaz.
 
 **Kendi yüzün:** `assets/ben/foto.png` olarak önden net bir fotoğraf yükle, sonra siparişi `sadece: oyuncu_portre` ile çalıştır. Fotoğraf oyun paketine girmez.
 

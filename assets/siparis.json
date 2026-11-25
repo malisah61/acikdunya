@@ -1,9 +1,203 @@
 {
-  "siparisler": [
-    {"ad": "oyuncu_portre", "tarif": "friendly cartoon portrait of a man, head and shoulders, warm smile, game avatar icon, clean outline", "tur": "karakter", "stil": "cartoon", "adet": 2, "seed": 61, "boyut": [768, 768], "referans": "assets/ben/foto.png", "ref_scale": 0.6, "cikti": "assets/uretilen/oyuncu_portre.png"},
-    {"ad": "ikon_simit", "tarif": "turkish simit, round sesame bread ring, game item icon, cartoon, single object", "tur": "esya", "stil": "cartoon", "adet": 2, "seed": 11, "boyut": [512, 512], "cikti": "assets/uretilen/ikon_simit.png"},
-    {"ad": "ikon_cay", "tarif": "turkish tea in a small tulip shaped glass on a saucer, game item icon, cartoon, single object", "tur": "esya", "stil": "cartoon", "adet": 2, "seed": 12, "boyut": [512, 512], "cikti": "assets/uretilen/ikon_cay.png"},
-    {"ad": "ikon_nobet", "tarif": "doctor stethoscope, game item icon, cartoon, single object", "tur": "esya", "stil": "cartoon", "adet": 2, "seed": 13, "boyut": [512, 512], "cikti": "assets/uretilen/ikon_nobet.png"},
-    {"ad": "ikon_yatak", "tarif": "cozy single bed with blue blanket and white pillow, game item icon, cartoon, single object", "tur": "esya", "stil": "cartoon", "adet": 2, "seed": 14, "boyut": [512, 512], "cikti": "assets/uretilen/ikon_yatak.png"}
-  ]
+ "siparisler": [
+  {
+   "ad": "oyuncu_portre",
+   "tarif": "friendly cartoon portrait of a man, head and shoulders, warm smile, game avatar icon, clean outline",
+   "tur": "karakter",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 61,
+   "boyut": [
+    768,
+    768
+   ],
+   "referans": "assets/ben/foto.png",
+   "ref_scale": 0.6,
+   "cikti": "assets/uretilen/oyuncu_portre.png"
+  },
+  {
+   "ad": "ikon_simit",
+   "tarif": "turkish simit, round sesame bread ring, game item icon, cartoon, single object",
+   "tur": "esya",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 11,
+   "boyut": [
+    512,
+    512
+   ],
+   "cikti": "assets/uretilen/ikon_simit.png"
+  },
+  {
+   "ad": "ikon_cay",
+   "tarif": "turkish tea in a small tulip shaped glass on a saucer, game item icon, cartoon, single object",
+   "tur": "esya",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 12,
+   "boyut": [
+    512,
+    512
+   ],
+   "cikti": "assets/uretilen/ikon_cay.png"
+  },
+  {
+   "ad": "ikon_nobet",
+   "tarif": "doctor stethoscope, game item icon, cartoon, single object",
+   "tur": "esya",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 13,
+   "boyut": [
+    512,
+    512
+   ],
+   "cikti": "assets/uretilen/ikon_nobet.png"
+  },
+  {
+   "ad": "ikon_yatak",
+   "tarif": "cozy single bed with blue blanket and white pillow, game item icon, cartoon, single object",
+   "tur": "esya",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 14,
+   "boyut": [
+    512,
+    512
+   ],
+   "cikti": "assets/uretilen/ikon_yatak.png"
+  },
+  {
+   "ad": "kisi_oyuncu",
+   "tarif": "a man in his thirties, short dark hair, light beard, casual shirt and jeans, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tur": "karakter",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 100,
+   "boyut": [
+    768,
+    1024
+   ],
+   "cikti": "assets/uretilen/karakterler/oyuncu.png",
+   "referans": "assets/ben/foto.png",
+   "ref_scale": 0.55
+  },
+  {
+   "ad": "kisi_bakkal_hasan",
+   "tarif": "friendly turkish grocer uncle in his sixties, grey moustache, flat cap, white apron over vest, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tur": "karakter",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 101,
+   "boyut": [
+    768,
+    1024
+   ],
+   "cikti": "assets/uretilen/karakterler/bakkal_hasan.png"
+  },
+  {
+   "ad": "kisi_kahveci_riza",
+   "tarif": "turkish tea house owner in his fifties, black moustache, rolled-up sleeves, dark vest, white shirt, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tur": "karakter",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 102,
+   "boyut": [
+    768,
+    1024
+   ],
+   "cikti": "assets/uretilen/karakterler/kahveci_riza.png"
+  },
+  {
+   "ad": "kisi_doktor_selin",
+   "tarif": "female doctor in her thirties, hair in a bun, white coat over blue scrubs, stethoscope around neck, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tur": "karakter",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 103,
+   "boyut": [
+    768,
+    1024
+   ],
+   "cikti": "assets/uretilen/karakterler/doktor_selin.png"
+  },
+  {
+   "ad": "kisi_hemsire_ayse",
+   "tarif": "young female nurse, light blue nurse uniform, ponytail, white sneakers, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tur": "karakter",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 104,
+   "boyut": [
+    768,
+    1024
+   ],
+   "cikti": "assets/uretilen/karakterler/hemsire_ayse.png"
+  },
+  {
+   "ad": "kisi_sakin_teyze",
+   "tarif": "elderly turkish woman, headscarf, long floral skirt, knitted cardigan, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tur": "karakter",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 105,
+   "boyut": [
+    768,
+    1024
+   ],
+   "cikti": "assets/uretilen/karakterler/sakin_teyze.png"
+  },
+  {
+   "ad": "kisi_sakin_ogrenci",
+   "tarif": "university student in his twenties, hoodie, backpack straps, sneakers, messy hair, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tur": "karakter",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 106,
+   "boyut": [
+    768,
+    1024
+   ],
+   "cikti": "assets/uretilen/karakterler/sakin_ogrenci.png"
+  },
+  {
+   "ad": "kisi_sakin_memur",
+   "tarif": "office worker man in his forties, grey suit, tie, glasses, neat side part, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tur": "karakter",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 107,
+   "boyut": [
+    768,
+    1024
+   ],
+   "cikti": "assets/uretilen/karakterler/sakin_memur.png"
+  },
+  {
+   "ad": "kisi_sakin_isci",
+   "tarif": "construction worker man, orange safety vest, yellow hard hat, work boots, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tur": "karakter",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 108,
+   "boyut": [
+    768,
+    1024
+   ],
+   "cikti": "assets/uretilen/karakterler/sakin_isci.png"
+  },
+  {
+   "ad": "kisi_sakin_kadin",
+   "tarif": "woman in her thirties, long brown hair, denim jacket, long skirt, ankle boots, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tur": "karakter",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 109,
+   "boyut": [
+    768,
+    1024
+   ],
+   "cikti": "assets/uretilen/karakterler/sakin_kadin.png"
+  }
+ ]
 }

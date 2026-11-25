@@ -14,6 +14,9 @@ var para_etiket: Label
 var tokluk_cubuk: ProgressBar
 var enerji_cubuk: ProgressBar
 var eylem_dugme: Button
+var kisi_karti: VBoxContainer
+var kisi_resim: TextureRect
+var kisi_etiket: Label
 var mesaj_etiket: Label
 var perde: ColorRect
 var karakter_paneli: PanelContainer
@@ -43,6 +46,8 @@ func _ready() -> void:
 	hb.add_theme_constant_override("separation", 10)
 	panel.add_child(hb)
 	var portre_doku := gorsel("oyuncu_portre")
+	if portre_doku == null:
+		portre_doku = gorsel("karakterler/oyuncu")
 	if portre_doku:
 		var portre := TextureRect.new()
 		portre.texture = portre_doku
@@ -79,6 +84,18 @@ func _ready() -> void:
 	eksi.pressed.connect(func() -> void: kamera.yakinlas(3.0))
 	var arti := _dugme(ust, "+", Vector2(60, 60))
 	arti.pressed.connect(func() -> void: kamera.yakinlas(-3.0))
+	kisi_karti = VBoxContainer.new()
+	kisi_karti.visible = false
+	sag.add_child(kisi_karti)
+	kisi_resim = TextureRect.new()
+	kisi_resim.custom_minimum_size = Vector2(320, 220)
+	kisi_resim.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	kisi_resim.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	kisi_karti.add_child(kisi_resim)
+	kisi_etiket = _etiket(kisi_karti, 22)
+	kisi_etiket.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	kisi_etiket.add_theme_constant_override("outline_size", 8)
+	kisi_etiket.add_theme_color_override("font_outline_color", Color.BLACK)
 	eylem_dugme = _dugme(sag, "", Vector2(320, 90))
 	eylem_dugme.add_theme_font_size_override("font_size", 24)
 	eylem_dugme.expand_icon = true
@@ -180,7 +197,14 @@ func mesaj_goster(metin: String) -> void:
 	mesaj_etiket.modulate.a = 1.0
 
 
-func eylem_goster(ad: String, metin: String) -> void:
+func eylem_goster(ad: String, metin: String, kisi := "", kisi_ad := "") -> void:
+	var resim: Texture2D = null
+	if kisi != "":
+		resim = gorsel("karakterler/" + kisi)
+	kisi_resim.texture = resim
+	kisi_resim.visible = resim != null
+	kisi_etiket.text = kisi_ad
+	kisi_karti.visible = kisi_ad != ""
 	eylem_dugme.text = metin if _dokunmatik else "[E]  " + metin
 	eylem_dugme.icon = gorsel(EYLEM_IKONU.get(ad, ""))
 	eylem_dugme.visible = true
@@ -188,6 +212,7 @@ func eylem_goster(ad: String, metin: String) -> void:
 
 func eylem_gizle() -> void:
 	eylem_dugme.visible = false
+	kisi_karti.visible = false
 
 
 func karart() -> void:

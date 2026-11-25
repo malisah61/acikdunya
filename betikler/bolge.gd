@@ -3,3 +3,6 @@ extends Area3D
 
 var eylem := ""
 var metin := ""
+## Bölgedeki kişi (görseli: assets/uretilen/karakterler/<kisi>.png)
+var kisi := ""
+var kisi_ad := ""

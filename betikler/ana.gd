@@ -96,7 +96,7 @@ func _unhandled_input(e: InputEvent) -> void:
 func _bolgeye_girdi(body: Node3D, b) -> void:
 	if body == oyuncu:
 		aktif_bolgeler.append(b)
-		hud.eylem_goster(b.eylem, b.metin)
+		hud.eylem_goster(b.eylem, b.metin, b.kisi, b.kisi_ad)
 
 
 func _bolgeden_cikti(body: Node3D, b) -> void:
@@ -106,7 +106,7 @@ func _bolgeden_cikti(body: Node3D, b) -> void:
 			hud.eylem_gizle()
 		else:
 			var son = aktif_bolgeler.back()
-			hud.eylem_goster(son.eylem, son.metin)
+			hud.eylem_goster(son.eylem, son.metin, son.kisi, son.kisi_ad)
 
 
 func _eylem() -> void:

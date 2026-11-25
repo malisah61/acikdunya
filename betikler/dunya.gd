@@ -97,10 +97,12 @@ static func toplu(kok: Node3D, boyut: Vector3, mat: Material, konumlar: Array) -
 	kok.add_child(mmi)
 
 
-static func bolge(ebeveyn: Node3D, konum: Vector3, boyut: Vector3, eylem: String, metin: String, sonuc: Dictionary) -> void:
+static func bolge(ebeveyn: Node3D, konum: Vector3, boyut: Vector3, eylem: String, metin: String, sonuc: Dictionary, kisi := "", kisi_ad := "") -> void:
 	var a = BOLGE.new()
 	a.eylem = eylem
 	a.metin = metin
+	a.kisi = kisi
+	a.kisi_ad = kisi_ad
 	a.collision_layer = 0
 	a.collision_mask = 2
 	var cs := CollisionShape3D.new()
@@ -344,7 +346,7 @@ static func kur(kok: Node3D) -> Dictionary:
 		kutu(bakkal, Vector3(0.4, 0.3, 0.3), Vector3(-3.6 + i * 0.55, 2.15, -4.3), malzeme(urun[i % 4]), false)
 	kutu(bakkal, Vector3(3.0, 1.0, 0.8), Vector3(3.5, 0.5, 0.8), malzeme(Color(0.5, 0.33, 0.2)))
 	sabit_kisi(bakkal, Vector3(3.5, 0, -0.2), Color(0.95, 0.95, 0.95), rng)
-	bolge(bakkal, Vector3(3.5, 1, 2.2), Vector3(3.0, 2, 1.8), "simit", "Simit + ayran al (25 TL)", sonuc)
+	bolge(bakkal, Vector3(3.5, 1, 2.2), Vector3(3.0, 2, 1.8), "simit", "Simit + ayran al (25 TL)", sonuc, "bakkal_hasan", "Bakkal Hasan Amca")
 	yuruyus_yolu(kok, -30, -9, -7)
 	apartman(kok, Vector3(-46, 0, -14), 10, 10, 9, Color(0.82, 0.72, 0.62), sonuc)
 	apartman(kok, Vector3(-14, 0, -14), 10, 10, 12, Color(0.72, 0.76, 0.82), sonuc)
@@ -367,7 +369,7 @@ static func kur(kok: Node3D) -> Dictionary:
 	sabit_kisi(kahve, Vector3(4.5, 0, -4.4), Color(0.9, 0.9, 0.9), rng)
 	sabit_kisi(kahve, Vector3(-4.9, 0, -1), Color(0.4, 0.3, 0.25), rng)
 	sabit_kisi(kahve, Vector3(0.9, 0, 2.5), Color(0.3, 0.35, 0.5), rng)
-	bolge(kahve, Vector3(4.5, 1, -2.0), Vector3(4.0, 2, 1.8), "cay", "Çay iç (10 TL)", sonuc)
+	bolge(kahve, Vector3(4.5, 1, -2.0), Vector3(4.0, 2, 1.8), "cay", "Çay iç (10 TL)", sonuc, "kahveci_riza", "Kahveci Rıza Usta")
 	yuruyus_yolu(kok, -30, 51, 53)
 	apartman(kok, Vector3(-47, 0, 46), 8, 9, 6, Color(0.9, 0.82, 0.7), sonuc)
 	apartman(kok, Vector3(-13, 0, 46), 10, 9, 9, Color(0.78, 0.8, 0.72), sonuc)
@@ -391,7 +393,7 @@ static func kur(kok: Node3D) -> Dictionary:
 		kutu(hst, Vector3(0.9, 0.7, 2.0), Vector3(x, 0.35, -4.0), malzeme(Color(0.95, 0.95, 0.95)))
 	for i in 6:
 		kutu(hst, Vector3(0.6, 0.5, 0.6), Vector3(-10.0 + i * 0.8, 0.25, 2.0), malzeme(Color(0.3, 0.45, 0.7)))
-	bolge(hst, Vector3(0, 1, -0.6), Vector3(5.0, 2, 1.8), "nobet", "Nöbete gir (8 saat, +400 TL)", sonuc)
+	bolge(hst, Vector3(0, 1, -0.6), Vector3(5.0, 2, 1.8), "nobet", "Nöbete gir (8 saat, +400 TL)", sonuc, "doktor_selin", "Başhekim Dr. Selin")
 	yuruyus_yolu(kok, 30, 51, 53)
 	kutu(kok, Vector3(40, 0.05, 24), Vector3(30, 0.025, 21), malzeme(Color(0.3, 0.3, 0.32), "doku_asfalt", 0.2), false)
 	var park_cizgi: Array = []
