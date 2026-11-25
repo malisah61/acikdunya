@@ -4,6 +4,10 @@ extends Node
 signal mesaj(metin: String)
 signal bayildi
 signal karakter_degisti
+## Hava değişti: "acik" ya da "yagmur"
+signal hava_degisti(hava: String)
+## Memur cüzdanını parkta düşürdü: ana sahne cüzdanı parka koyar
+signal cuzdan_dustu
 
 const KAYIT_YOLU := "user://kayit.json"
 ## 1 gerçek saniye = kaç oyun dakikası (24 dakikada bir gün)
@@ -60,8 +64,15 @@ var dostluk := {"bakkal_hasan": 0, "kahveci_riza": 0, "doktor_selin": 0}
 ## Bugünün görevleri: [{id, ad, hedef, n, odul}] ve hangi güne ait oldukları
 var gorevler: Array = []
 var gorev_gunu := 0
-## Yan görev durumu: "" yok, "ekmek" (bakkaldan ekmek al), "ekmek_alindi" (teyzeye götür)
+## Yan görev durumu: "" yok; "ekmek"/"ekmek_alindi" (teyzenin ekmeği),
+## "cuzdan"/"cuzdan_bulundu" (memurun kayıp cüzdanı), "yemek"/"yemek_alindi" (işçinin yemeği)
 var yan_gorev := ""
+## Hava durumu: "acik" ya da "yagmur"; yagmur_bitis = yağmurun biteceği mutlak oyun dakikası
+var hava := "acik"
+var yagmur_bitis := 0.0
+## Yağış şiddeti 0..1 (yumuşak geçiş; görüntü ve ses bunu kullanır)
+var yagis := 0.0
+var _hava_saati := -1
 var komsuluk := 0
 var _ac_uyarildi := false
 var _yorgun_uyarildi := false
@@ -71,12 +82,21 @@ func _ready() -> void:
 	yukle()
 	if gorev_gunu != gun or gorevler.is_empty():
 		_gunluk_yenile()
+	# duman testi için: godot -- --yagmur --cuzdan (yağmuru ve cüzdan görevini hemen başlatır)
+	var argumanlar := OS.get_cmdline_user_args()
+	if "--yagmur" in argumanlar:
+		hava = "yagmur"
+		yagmur_bitis = mutlak_dakika() + 120.0
+		yagis = 1.0
+	if "--cuzdan" in argumanlar:
+		yan_gorev = "cuzdan"
 
 
 func _process(delta: float) -> void:
 	if duraklat:
 		return
 	ilerle(delta * SANIYE_BASINA_DAKIKA)
+	yagis = move_toward(yagis, 1.0 if hava == "yagmur" else 0.0, delta * 0.15)
 	_kayit_sayaci += delta
 	if _kayit_sayaci >= 60.0:
 		_kayit_sayaci = 0.0
@@ -99,6 +119,35 @@ func _saat_ekle(dk: float) -> void:
 		gun += 1
 	if gorev_gunu != gun:
 		_gunluk_yenile()
+	_hava_guncelle()
+
+
+func mutlak_dakika() -> float:
+	return gun * 1440.0 + dakika
+
+
+## Her oyun saatinde bir: açık havada %10 yağmur başlar (1-3 saat sürer); süre dolunca açar.
+func _hava_guncelle() -> void:
+	var saat := int(mutlak_dakika() / 60.0)
+	if saat == _hava_saati:
+		return
+	var ilk := _hava_saati < 0
+	_hava_saati = saat
+	if ilk:
+		return
+	if hava == "yagmur" and mutlak_dakika() >= yagmur_bitis:
+		hava = "acik"
+		hava_degisti.emit(hava)
+		mesaj.emit("Yağmur dindi, hava açtı.")
+	elif hava == "acik" and randf() < 0.10:
+		hava = "yagmur"
+		yagmur_bitis = mutlak_dakika() + randf_range(60.0, 180.0)
+		hava_degisti.emit(hava)
+		mesaj.emit("Yağmur başladı! Sakinler şemsiyelerini açtı. Kahvehanede bir çay iyi gider.")
+
+
+func yagmurda_disarida() -> bool:
+	return hava == "yagmur" and Ses.ic_mekan == 0
 
 
 ## Zamanı ilerletir ve ihtiyaçları buna göre düşürür.
@@ -112,6 +161,8 @@ func ilerle(dk: float, uyku := false) -> void:
 		var yorulma := dk * 100.0 / 1080.0   # ~18 saat uyanık kalınabilir
 		if tokluk <= 0.0:
 			yorulma *= 2.0
+		if yagmurda_disarida():
+			yorulma *= 1.3   # ıslanınca daha çabuk yorulursun
 		enerji = clampf(enerji - yorulma, 0.0, 100.0)
 		if enerji <= 0.0:
 			_bayil()
@@ -180,6 +231,10 @@ func eylem(ad: String) -> bool:
 				para -= 5
 				yan_gorev = "ekmek_alindi"
 				ek = "\nTeyze için bir ekmek de aldın (-5 TL). Şimdi ona götür!"
+			elif yan_gorev == "yemek" and para >= f:
+				para -= f
+				yan_gorev = "yemek_alindi"
+				ek = "\nİşçi usta için de bir simit + ayran aldın (-%d TL). Şimdi ona götür!" % f
 			mesaj.emit("Simit ve ayran aldın. Afiyet olsun! (-%d TL)%s%s%s" % [f, _dost_artir("bakkal_hasan"), ek, gorev_ilerle("simit")])
 			return false
 		"cay":
@@ -301,7 +356,7 @@ func eylem_metni(ad: String, varsayilan: String) -> String:
 
 ## Telefon menüsünde görünen özet.
 func telefon_metni() -> String:
-	var s: String = "%s\n%s   •   Para: %d TL\n\nMESLEKLER\n" % [karakter["isim"], saat_metni(), para]
+	var s: String = "%s\n%s   •   Para: %d TL\n%s\n\nMESLEKLER\n" % [karakter["isim"], saat_metni(), para, hava_metni()]
 	for ad in MESLEKLER:
 		var m: Dictionary = MESLEKLER[ad]
 		var b: Array = m["basamak"]
@@ -329,6 +384,14 @@ func telefon_metni() -> String:
 		s += "» Yan görev: Teyze için bakkaldan ekmek al (alışverişte).\n"
 	elif yan_gorev == "ekmek_alindi":
 		s += "» Yan görev: Ekmeği mahalledeki teyzeye götür (yanına git).\n"
+	elif yan_gorev == "cuzdan":
+		s += "» Yan görev: Memurun cüzdanı parkta (bakkalın arkası, havuzun çevresi). Parlayan cüzdanı bul.\n"
+	elif yan_gorev == "cuzdan_bulundu":
+		s += "» Yan görev: Cüzdanı bir memura geri ver.\n"
+	elif yan_gorev == "yemek":
+		s += "» Yan görev: İşçi usta için bakkaldan simit + ayran al (alışverişte).\n"
+	elif yan_gorev == "yemek_alindi":
+		s += "» Yan görev: Yemeği işçi ustaya götür.\n"
 	var it := itibar_seviye()
 	s += "Mahallede itibarın: %s (%d puan)\n" % [ITIBAR_SEVIYELERI[it][0], komsuluk]
 	s += "\nİPUCU\n"
@@ -338,6 +401,8 @@ func telefon_metni() -> String:
 		s += "Yorgunsun: evde uyu ya da kahvehanede çay iç."
 	elif para < 50:
 		s += "Para azaldı: hastanede nöbet, bakkalda ya da kahvehanede mesai."
+	elif hava == "yagmur":
+		s += "Yağmur yağıyor: dışarıda ıslanınca daha çabuk yorulursun. Kahvehanede çay içip bekle."
 	elif gece_mi():
 		s += "Gece oldu, sakinler evlerine çekildi. Uyumak için iyi bir saat."
 	else:
@@ -350,6 +415,7 @@ func kaydet() -> void:
 		"gun": gun, "dakika": dakika, "para": para, "tokluk": tokluk, "enerji": enerji,
 		"karakter": karakter, "karakter_hazir": karakter_hazir, "is_sayilari": is_sayilari, "dostluk": dostluk,
 		"gorevler": gorevler, "gorev_gunu": gorev_gunu, "yan_gorev": yan_gorev, "komsuluk": komsuluk,
+		"hava": hava, "yagmur_bitis": yagmur_bitis,
 		"konum": [oyuncu_konum.x, oyuncu_konum.y, oyuncu_konum.z],
 	}
 	var f := FileAccess.open(KAYIT_YOLU, FileAccess.WRITE)
@@ -401,6 +467,9 @@ func yukle() -> void:
 	gorev_gunu = int(v.get("gorev_gunu", 0))
 	yan_gorev = str(v.get("yan_gorev", ""))
 	komsuluk = int(v.get("komsuluk", 0))
+	hava = "yagmur" if str(v.get("hava", "acik")) == "yagmur" else "acik"
+	yagmur_bitis = float(v.get("yagmur_bitis", 0.0))
+	yagis = 1.0 if hava == "yagmur" else 0.0
 	var p = v.get("konum", null)
 	if p is Array and p.size() == 3:
 		oyuncu_konum = Vector3(float(p[0]), float(p[1]), float(p[2]))
@@ -460,6 +529,40 @@ func _itibar_artir(n: int) -> String:
 	return ""
 
 
+## Sol üst panelde görünen kısa yan görev hatırlatması ("" = yan görev yok).
+func yan_gorev_ozet() -> String:
+	match yan_gorev:
+		"ekmek":
+			return "Teyzeye ekmek: bakkaldan al"
+		"ekmek_alindi":
+			return "Teyzeye ekmeği götür"
+		"cuzdan":
+			return "Memurun cüzdanı: parkta ara"
+		"cuzdan_bulundu":
+			return "Cüzdanı memura ver"
+		"yemek":
+			return "İşçiye yemek: bakkaldan al"
+		"yemek_alindi":
+			return "Yemeği işçiye götür"
+	return ""
+
+
+func hava_metni() -> String:
+	if hava == "yagmur":
+		var kalan := maxf(yagmur_bitis - mutlak_dakika(), 0.0)
+		return "Hava: Yağmurlu (yaklaşık %d saat daha)" % maxi(1, int(ceil(kalan / 60.0)))
+	return "Hava: Açık" if not gece_mi() else "Hava: Açık, yıldızlı gece"
+
+
+## Oyuncu parktaki cüzdanı buldu (ana sahnedeki cüzdan bölgesi çağırır).
+func cuzdan_bul() -> void:
+	if yan_gorev != "cuzdan":
+		return
+	yan_gorev = "cuzdan_bulundu"
+	Ses.cal("cuzdan_bul", null, 0.0, -2.0)
+	mesaj.emit("Memurun cüzdanını buldun! Şimdi bir memura geri ver.")
+
+
 ## Bir sakin oyuncuyu selamladı (npc.gd). tip: "teyze", "ogrenci", "memur", "isci", "kadin" ya da "".
 ## Sakinin balonunda söyleyeceği özel söz varsa döndürür (yan görev), yoksa "".
 func selamlasti(tip: String) -> String:
@@ -471,11 +574,38 @@ func selamlasti(tip: String) -> String:
 			yan_gorev = ""
 			para += 60
 			soz = "Sağ ol evladım, Allah razı olsun!"
+			Ses.soz("sakin_teyze_tesekkur", 0.2)
 			ek += "\nTeyzeye ekmeğini götürdün. Hayır duasını aldın! (+60 TL)" + _itibar_artir(2)
 		elif yan_gorev == "" and not gece_mi() and randf() < 0.35:
 			yan_gorev = "ekmek"
 			soz = "Evladım, bakkaldan bana bir ekmek alır mısın?"
+			Ses.soz("sakin_teyze_ekmek", 0.2)
 			ek += "\nYan görev: Teyze bakkaldan ekmek istedi. Alışverişte ekmek de al, sonra ona götür."
+	elif tip == "memur":
+		if yan_gorev == "cuzdan_bulundu":
+			yan_gorev = ""
+			para += 80
+			soz = "Cüzdanım! Allah razı olsun komşu!"
+			Ses.soz("sakin_memur_tesekkur", 0.2)
+			ek += "\nCüzdanı sahibine verdin. Memur teşekkür edip 80 TL verdi! (+80 TL)" + _itibar_artir(2)
+		elif yan_gorev == "" and not gece_mi() and hava == "acik" and randf() < 0.3:
+			yan_gorev = "cuzdan"
+			soz = "Komşu, cüzdanımı parkta düşürdüm galiba!"
+			Ses.soz("sakin_memur_cuzdan", 0.2)
+			ek += "\nYan görev: Memur cüzdanını bakkalın arkasındaki parkta düşürmüş. Bul ve geri getir!"
+			cuzdan_dustu.emit()
+	elif tip == "isci":
+		if yan_gorev == "yemek_alindi":
+			yan_gorev = ""
+			para += 50
+			soz = "Eline sağlık usta, açlıktan ölüyordum!"
+			Ses.soz("sakin_isci_tesekkur", 0.2)
+			ek += "\nİşçi ustaya yemeğini götürdün. Dua etti, bahşiş verdi! (+50 TL)" + _itibar_artir(2)
+		elif yan_gorev == "" and not gece_mi() and randf() < 0.3:
+			yan_gorev = "yemek"
+			soz = "Usta, sefertasımı evde unuttum. Bana bir simit alır mısın?"
+			Ses.soz("sakin_isci_yemek", 0.2)
+			ek += "\nYan görev: İşçi usta aç kalmış. Bakkalda alışveriş yaparken ona da simit + ayran al, sonra götür."
 	if ek != "":
 		mesaj.emit(ek.strip_edges())
 	return soz

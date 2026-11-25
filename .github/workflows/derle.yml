@@ -46,6 +46,8 @@ jobs:
       - name: Duman testi (betik hatası varsa durdur)
         run: |
           godot --headless --quit-after 900 2>&1 | tee test.log || true
+          # 2. tur: yağmur ve cüzdan yan görevi açıkken (hava kodu da denensin)
+          godot --headless --quit-after 600 -- --yagmur --cuzdan 2>&1 | tee -a test.log || true
           if grep -E "SCRIPT ERROR|Parse Error|Failed to load script|Invalid call|Invalid access|Invalid assignment" test.log; then
             echo "::error::Betik hatası bulundu"; exit 1
           fi

@@ -202,9 +202,54 @@ def terfi():
     return x
 
 
+def yagmur(sure=30):
+    """Yağmur: süzülmüş pembe gürültü + tek tek damla şıpırtıları + çatı oluğu damlaması; dikişsiz."""
+    n = sure * SR
+    beyaz = rng.standard_normal(n)
+    # pembeye yakın: alçak geçiren üstüne hafif tiz
+    x = suzgec(beyaz, alcak=6000, yuksek=300) * 0.5 + suzgec(beyaz, alcak=900, yuksek=80) * 0.35
+    # yavaş dalgalanan yoğunluk (döngü uzunluğuna tam bölünen 3 periyot)
+    t = np.arange(n) / SR
+    x *= 0.85 + 0.15 * np.sin(2 * np.pi * 3 * t / sure)
+    for _ in range(sure * 45):  # tek damlalar
+        d = tok(rng.uniform(1800, 5200), 0.03, 0.008, 1) * rng.uniform(0.05, 0.22)
+        ekle(x, d, rng.integers(0, n))
+    for k in range(sure // 2):  # oluk damlası: ara ara tok "tıp"
+        d = tok(rng.uniform(700, 1100), 0.12, 0.03, 2) * 0.25
+        ekle(x, d, (k * 2 + rng.uniform(0, 1.5)) * SR)
+    return x
+
+
+def gok_gurultusu(sure=3.0):
+    """Uzak gök gürültüsü: çok alçak süzülmüş gürültü, çatlayan başlangıç, yuvarlanan kuyruk."""
+    n = int(sure * SR)
+    t = np.arange(n) / SR
+    g = rng.standard_normal(n)
+    x = suzgec(g, alcak=160) * 2.5 + suzgec(g, alcak=600, yuksek=150) * 0.4 * np.exp(-t / 0.35)
+    yuvarlan = np.exp(-t / 1.1) * (0.6 + 0.4 * np.abs(np.sin(2 * np.pi * 1.3 * t + 0.5)))
+    x *= np.minimum(t / 0.04, 1.0) * yuvarlan
+    x[-4000:] *= np.linspace(1, 0, 4000)
+    return x
+
+
+def cuzdan_bul():
+    """Bir şey buldun: iki yükselen telli nota + bozuk para şıngırtısı."""
+    x = np.zeros(int(1.0 * SR))
+    for k, f in enumerate([659.3, 987.8]):
+        ekle(x, mizrap(f, 0.8, 0.25) * 0.6, k * 0.1 * SR)
+    for k in range(4):
+        ekle(x, tok(rng.uniform(3000, 4500), 0.2, 0.06, 3) * 0.2, (0.05 + k * 0.07) * SR)
+    x[-2000:] *= np.linspace(1, 0, 2000)
+    return x
+
+
 if __name__ == "__main__":
     CIKIS = sys.argv[1] if len(sys.argv) > 1 else "."
     os.makedirs(CIKIS, exist_ok=True)
+    if len(sys.argv) > 2:  # sadece istenenler: python3 araclar/ses_sentez.py <klasör> yagmur,gok_gurultusu
+        for ad in sys.argv[2].split(","):
+            kaydet(ad, globals()[ad]())
+        sys.exit(0)
     kaydet("uyuma", uyuma())
     kaydet("kahvehane", kahvehane())
     kaydet("hastane", hastane())

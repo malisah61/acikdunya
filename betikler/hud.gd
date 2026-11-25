@@ -6,6 +6,8 @@ signal eylem_istendi
 
 const JOYSTICK := preload("res://betikler/joystick.gd")
 const EYLEM_IKONU := {"uyu": "ikon_yatak", "simit": "ikon_simit", "cay": "ikon_cay", "nobet": "ikon_nobet", "bakkal_is": "ikon_raf", "garson": "ikon_tepsi"}
+## Yan görevin küçük ikonu (sol üst panelde görev satırının başında)
+const GOREV_IKONU := {"ekmek": "ikon_ekmek", "ekmek_alindi": "ikon_ekmek", "cuzdan": "ikon_cuzdan", "cuzdan_bulundu": "ikon_cuzdan", "yemek": "ikon_sefertasi", "yemek_alindi": "ikon_sefertasi"}
 
 var oyuncu
 var kamera
@@ -25,6 +27,12 @@ var telefon_yazi: Label
 var _zaman := 0.0
 var _mesaj_sure := 0.0
 var _dokunmatik := false
+var hava_ikon: TextureRect
+var _hava_dokular := {}
+var gorev_satir: HBoxContainer
+var gorev_ikon: TextureRect
+var gorev_etiket: Label
+var _son_gorev := "-"
 
 
 static func gorsel(ad: String) -> Texture2D:
@@ -61,10 +69,30 @@ func _ready() -> void:
 	var vb := VBoxContainer.new()
 	vb.custom_minimum_size.x = 260
 	hb.add_child(vb)
-	saat_etiket = _etiket(vb, 22)
+	var saat_satir := HBoxContainer.new()
+	vb.add_child(saat_satir)
+	saat_etiket = _etiket(saat_satir, 22)
+	saat_etiket.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_hava_dokular = {"acik": gorsel("ikon_hava_gunes"), "yagmur": gorsel("ikon_hava_yagmur")}
+	hava_ikon = TextureRect.new()
+	hava_ikon.custom_minimum_size = Vector2(30, 30)
+	hava_ikon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	hava_ikon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	saat_satir.add_child(hava_ikon)
 	para_etiket = _etiket(vb, 20)
 	tokluk_cubuk = _cubuk(vb, "Tokluk", Color(0.95, 0.6, 0.2), "ikon_simit")
 	enerji_cubuk = _cubuk(vb, "Enerji", Color(0.3, 0.8, 0.4), "ikon_cay")
+	# etkin yan görevin kısa hatırlatması
+	gorev_satir = HBoxContainer.new()
+	gorev_satir.visible = false
+	vb.add_child(gorev_satir)
+	gorev_ikon = TextureRect.new()
+	gorev_ikon.custom_minimum_size = Vector2(26, 26)
+	gorev_ikon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	gorev_ikon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	gorev_satir.add_child(gorev_ikon)
+	gorev_etiket = _etiket(gorev_satir, 16)
+	gorev_etiket.add_theme_color_override("font_color", Color(1.0, 0.9, 0.5))
 
 	# --- sağ alt: yakınlaştırma, karakter, eylem
 	var sag := VBoxContainer.new()
@@ -195,6 +223,20 @@ func _cubuk(ebeveyn: Control, ad: String, renk: Color, ikon: String) -> Progress
 
 func _process(delta: float) -> void:
 	saat_etiket.text = Oyun.saat_metni()
+	# hava ikonu (gece açık havada güneş gösterilmez); ikon yoksa saatin yanına yazı
+	var hd: Texture2D = _hava_dokular.get(Oyun.hava)
+	if Oyun.hava == "acik" and Oyun.gece_mi():
+		hd = null
+	hava_ikon.texture = hd
+	hava_ikon.visible = hd != null
+	if hd == null and Oyun.hava == "yagmur":
+		saat_etiket.text += "   Yağmur"
+	if Oyun.yan_gorev != _son_gorev:
+		_son_gorev = Oyun.yan_gorev
+		gorev_etiket.text = Oyun.yan_gorev_ozet()
+		gorev_ikon.texture = gorsel(GOREV_IKONU.get(_son_gorev, ""))
+		gorev_ikon.visible = gorev_ikon.texture != null
+		gorev_satir.visible = gorev_etiket.text != ""
 	para_etiket.text = "Para: %d TL" % Oyun.para
 	tokluk_cubuk.value = Oyun.tokluk
 	enerji_cubuk.value = Oyun.enerji

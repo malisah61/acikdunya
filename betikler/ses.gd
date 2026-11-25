@@ -58,7 +58,7 @@ func _ready() -> void:
 	_soz = AudioStreamPlayer.new()
 	_soz.bus = "Efekt"
 	add_child(_soz)
-	for ad in ["ortam/mahalle_gunduz", "ortam/gece", "ortam/kahvehane", "ortam/hastane", "muzik/mahalle", "muzik/gece"]:
+	for ad in ["ortam/mahalle_gunduz", "ortam/gece", "ortam/kahvehane", "ortam/hastane", "ortam/yagmur", "muzik/mahalle", "muzik/gece"]:
 		var s := _yukle(ad)
 		if s == null:
 			continue
@@ -148,7 +148,10 @@ func _process(delta: float) -> void:
 		_katmanlar[ad]["hedef"] = 0.0
 	# dışarıdaki ortam içeride de kısık duyulur
 	var dis := 0.35 if icerde else 1.0
-	_hedef("ortam/gece" if gece else "ortam/mahalle_gunduz", dis)
+	# yağmurda kuşlar/cırcırlar susar, yağmur sesi bastırır (içeride çatıya vuran kısık yağmur)
+	var y: float = Oyun.yagis
+	_hedef("ortam/gece" if gece else "ortam/mahalle_gunduz", dis * (1.0 - 0.8 * y))
+	_hedef("ortam/yagmur", y * (0.3 if icerde else 0.9))
 	# binanın kendi ortamı (kahvehane uğultusu, hastane koridoru); yoksa sadece dışarısı kısık duyulur
 	if icerde and ic_yer != "":
 		_hedef("ortam/" + ic_yer, 0.9)
