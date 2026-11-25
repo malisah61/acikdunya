@@ -20,7 +20,11 @@ Godot 4.3 + GDScript, GL Compatibility (eski telefonlarda da çalışsın diye).
 - Tokluk / enerji / para; enerji biterse bayılırsın
 - Gündüz dolaşıp gece evine dönen 24 mahalle sakini
 - **Esnafla dostluk**: Bakkal Hasan, Kahveci Rıza ve Dr. Selin'le her alışveriş/mesai dostluğu artırır (Tanıdık → Ahbap → Dost); ahbap olunca simit/çay indirimli, dost olunca mesaide %10 bahşiş. Telefonda "Dostlar" bölümü
-- **Sesler**: zemine göre adım (asfalt/çim/ev içi), kapı, bakkal zili, kasa, yeme, çay kaşığı, arayüz tıklama, bildirim; gündüz/gece mahalle ortam sesi (içeride kısılır, yumuşak geçiş); esnaf ve teyzelerin sesli selamı; telefonda efekt ve ortam/müzik ses ayarı
+- **Sesler**: zemine göre adım (asfalt/çim/ev içi), kapı, bakkal zili, kasa, yeme, çay kaşığı, arayüz tıklama, bildirim; gündüz/gece mahalle ortam sesi (içeride kısılır, yumuşak geçiş); kahvehane ve hastane iç ortam sesi; mahalle ve gece müziği (Uşşak havası); esnaf ve sakinlerin sesli selamı, mesai sonu teşekkürü, terfi tebriği ve fanfarı, görev tamam sesi, uyku sesi; telefonda efekt ve ortam/müzik ses ayarı
+- **Günlük görevler** (telefonda "Bugünün görevleri"): her gün 3 görev (simit al, çay iç, mesai yap, komşularla selamlaş, teyzeyle laflaş…), her biri para ödüllü; hepsini bitirince +50 TL
+- **Yan görev — teyzenin ekmeği**: teyzeler ara sıra bakkaldan ekmek ister; alışverişte ekmeği al, teyzeye götür (+60 TL, itibar)
+- **Mahalle itibarı**: görevler ve iyilikler itibar kazandırır (Yeni gelen → Bilinen yüz → Sevilen komşu → Mahallenin gözdesi)
+- Sakinlerin tipi var (teyze, öğrenci, memur, işçi, kadın): her biri kendi sözü ve sesiyle selam verir
 - Otomatik kayıt (dakikada bir, uyuyunca, nöbet bitince)
 
 ## Kontroller
@@ -63,10 +67,13 @@ Sonra bu depoda Settings → Secrets and variables → Actions → New repositor
 5. Komşularla ilişki, yan görevler, telefon menüsü
    - [x] Telefon menüsü (temel: durum, meslekler, ipucu) ve sakinlerin selamlaşması
    - [x] Esnafla dostluk puanı (indirim, bahşiş)
-   - [ ] Sakinlerle dostluk, yan görevler (telefondan)
+   - [x] Günlük görevler (telefonda), mahalle itibarı, ilk yan görev (teyzenin ekmeği)
+   - [ ] Daha çok yan görev (öğrencinin dersi, memurun kayıp cüzdanı, işçinin yemeği) ve sakinlerle kişisel dostluk
 6. Hava durumu, mevsimler, sesler
    - [x] Ses yöneticisi, efektler, zemine göre adım, gündüz/gece ortam, NPC replikleri, ses ayarı
-   - [ ] Kahvehane ve hastane iç ortam sesi, uzaktan kısa ezan, mahalle ve gece müziği (`siparis_ses.json`'da bekliyor)
+   - [x] Kahvehane ve hastane iç ortam sesi, mahalle ve gece müziği (koddan sentez: `araclar/ses_sentez.py`)
+   - [ ] Uzaktan kısa ezan (sentezle olmaz; atölye ses sekmesi ya da lisanslı gerçek kayıt bekliyor)
    - [ ] Sprite Atölye ses sekmesinden üretim (hazır olunca sentez seslerin yerine)
-   - [ ] Daha çok replik (öğrenci, memur, işçi; terfi/teşekkür tepkileri)
+   - [x] Daha çok replik (öğrenci, memur, işçi, kadın; teşekkür ve terfi tepkileri)
+   - [ ] Yağmur ortam sesi, görev/terfi seslerinin atölyeden daha iyisi
    - [ ] Yağmur, rüzgâr; mevsimler

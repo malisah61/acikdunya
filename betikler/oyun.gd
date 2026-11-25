@@ -29,6 +29,18 @@ const DOSTLUK_SEVIYELERI := [["Tanıdık", 0], ["Ahbap", 5], ["Dost", 15]]
 const ESNAF := {"bakkal_hasan": "Bakkal Hasan Amca", "kahveci_riza": "Kahveci Rıza Usta", "doktor_selin": "Dr. Selin"}
 ## Hangi eylem hangi esnafla yapılır
 const EYLEM_ESNAF := {"simit": "bakkal_hasan", "bakkal_is": "bakkal_hasan", "cay": "kahveci_riza", "garson": "kahveci_riza", "nobet": "doktor_selin"}
+## Günlük görev havuzu: her yeni gün 3 tanesi seçilir (Stardew'deki ilan panosu gibi)
+const GOREV_HAVUZU := [
+	{"id": "simit", "ad": "Bakkaldan simit al", "hedef": 2, "odul": 30},
+	{"id": "cay", "ad": "Kahvehanede çay iç", "hedef": 2, "odul": 30},
+	{"id": "mesai", "ad": "Bir işte mesai ya da nöbet tamamla", "hedef": 1, "odul": 60},
+	{"id": "selam", "ad": "Komşularla selamlaş", "hedef": 5, "odul": 40},
+	{"id": "teyze", "ad": "Bir teyzeyle laflaş", "hedef": 1, "odul": 30},
+	{"id": "bakkal_is", "ad": "Bakkalda rafları diz", "hedef": 1, "odul": 50},
+]
+const GOREV_HEPSI_ODUL := 50
+## Mahalledeki itibar (komşuluk puanı) basamakları
+const ITIBAR_SEVIYELERI := [["Yeni gelen", 0], ["Bilinen yüz", 5], ["Sevilen komşu", 15], ["Mahallenin gözdesi", 30]]
 
 var gun := 1
 var dakika := 8.0 * 60.0
@@ -45,12 +57,20 @@ var _kayit_sayaci := 0.0
 ## Her meslekte tamamlanan iş sayısı (kariyer basamağını belirler)
 var is_sayilari := {"nobet": 0, "bakkal_is": 0, "garson": 0}
 var dostluk := {"bakkal_hasan": 0, "kahveci_riza": 0, "doktor_selin": 0}
+## Bugünün görevleri: [{id, ad, hedef, n, odul}] ve hangi güne ait oldukları
+var gorevler: Array = []
+var gorev_gunu := 0
+## Yan görev durumu: "" yok, "ekmek" (bakkaldan ekmek al), "ekmek_alindi" (teyzeye götür)
+var yan_gorev := ""
+var komsuluk := 0
 var _ac_uyarildi := false
 var _yorgun_uyarildi := false
 
 
 func _ready() -> void:
 	yukle()
+	if gorev_gunu != gun or gorevler.is_empty():
+		_gunluk_yenile()
 
 
 func _process(delta: float) -> void:
@@ -77,6 +97,8 @@ func _saat_ekle(dk: float) -> void:
 	while dakika >= 1440.0:
 		dakika -= 1440.0
 		gun += 1
+	if gorev_gunu != gun:
+		_gunluk_yenile()
 
 
 ## Zamanı ilerletir ve ihtiyaçları buna göre düşürür.
@@ -139,6 +161,7 @@ func eylem(ad: String) -> bool:
 				dk += 1440.0
 			ilerle(dk, true)
 			enerji = 100.0
+			Ses.cal("uyuma", null, 0.0, -3.0)
 			mesaj.emit("Güzel bir uyku çektin. Günaydın!")
 			kaydet()
 			return true
@@ -152,7 +175,12 @@ func eylem(ad: String) -> bool:
 			ilerle(10.0)
 			Ses.cal("kasa_para")
 			Ses.cal("yeme", null, 0.05, -2.0)
-			mesaj.emit("Simit ve ayran aldın. Afiyet olsun! (-%d TL)%s" % [f, _dost_artir("bakkal_hasan")])
+			var ek := ""
+			if yan_gorev == "ekmek" and para >= 5:
+				para -= 5
+				yan_gorev = "ekmek_alindi"
+				ek = "\nTeyze için bir ekmek de aldın (-5 TL). Şimdi ona götür!"
+			mesaj.emit("Simit ve ayran aldın. Afiyet olsun! (-%d TL)%s%s%s" % [f, _dost_artir("bakkal_hasan"), ek, gorev_ilerle("simit")])
 			return false
 		"cay":
 			var f := fiyat("cay")
@@ -163,7 +191,7 @@ func eylem(ad: String) -> bool:
 			enerji = minf(enerji + 12.0, 100.0)
 			ilerle(20.0)
 			Ses.cal("cay_kasik")
-			mesaj.emit("Bir çay içtin, açıldın. (-%d TL)%s" % [f, _dost_artir("kahveci_riza")])
+			mesaj.emit("Bir çay içtin, açıldın. (-%d TL)%s%s" % [f, _dost_artir("kahveci_riza"), gorev_ilerle("cay")])
 			return false
 		"nobet", "bakkal_is", "garson":
 			return _calis(ad)
@@ -206,6 +234,14 @@ func _calis(meslek: String) -> bool:
 	metin += _dost_artir(esnaf)
 	if sonra > once:
 		metin += "\nTERFİ! Yeni unvanın: %s (iş başı %d TL)" % [b[sonra][0], int(b[sonra][2])]
+	metin += gorev_ilerle("mesai") + gorev_ilerle(meslek)
+	# işveren konuşur: terfide Dr. Selin tebrik eder, esnaf mesai sonunda teşekkür eder (dosya yoksa sessiz)
+	if sonra > once:
+		Ses.cal("terfi", null, 0.0, -2.0)
+	if sonra > once and esnaf == "doktor_selin":
+		Ses.soz("doktor_selin_terfi", 1.6)
+	elif esnaf != "doktor_selin":
+		Ses.soz(esnaf + "_tesekkur")
 	mesaj.emit(metin)
 	kaydet()
 	return true
@@ -284,6 +320,17 @@ func telefon_metni() -> String:
 		if i + 1 < DOSTLUK_SEVIYELERI.size():
 			s += " — %s için %d daha" % [DOSTLUK_SEVIYELERI[i + 1][0], int(DOSTLUK_SEVIYELERI[i + 1][1]) - n]
 		s += "\n"
+	s += "\nBUGÜNÜN GÖREVLERİ\n"
+	for g in gorevler:
+		var tamam: bool = int(g["n"]) >= int(g["hedef"])
+		s += "%s %s (%d/%d) — %d TL\n" % ["[x]" if tamam else "[ ]", g["ad"], mini(int(g["n"]), int(g["hedef"])), int(g["hedef"]), int(g["odul"])]
+	s += "Hepsini bitirirsen +%d TL ödül.\n" % GOREV_HEPSI_ODUL
+	if yan_gorev == "ekmek":
+		s += "» Yan görev: Teyze için bakkaldan ekmek al (alışverişte).\n"
+	elif yan_gorev == "ekmek_alindi":
+		s += "» Yan görev: Ekmeği mahalledeki teyzeye götür (yanına git).\n"
+	var it := itibar_seviye()
+	s += "Mahallede itibarın: %s (%d puan)\n" % [ITIBAR_SEVIYELERI[it][0], komsuluk]
 	s += "\nİPUCU\n"
 	if tokluk < 30.0:
 		s += "Karnın aç: bakkalda simit + ayran 25 TL."
@@ -302,6 +349,7 @@ func kaydet() -> void:
 	var veri := {
 		"gun": gun, "dakika": dakika, "para": para, "tokluk": tokluk, "enerji": enerji,
 		"karakter": karakter, "karakter_hazir": karakter_hazir, "is_sayilari": is_sayilari, "dostluk": dostluk,
+		"gorevler": gorevler, "gorev_gunu": gorev_gunu, "yan_gorev": yan_gorev, "komsuluk": komsuluk,
 		"konum": [oyuncu_konum.x, oyuncu_konum.y, oyuncu_konum.z],
 	}
 	var f := FileAccess.open(KAYIT_YOLU, FileAccess.WRITE)
@@ -343,7 +391,91 @@ func yukle() -> void:
 		for a in dostluk.keys():
 			if dost.has(a):
 				dostluk[a] = int(dost[a])
+	var gv = v.get("gorevler", [])
+	if gv is Array:
+		gorevler = []
+		for g in gv:
+			if typeof(g) == TYPE_DICTIONARY and g.has("id"):
+				gorevler.append({"id": str(g["id"]), "ad": str(g.get("ad", "")), "hedef": int(g.get("hedef", 1)),
+					"n": int(g.get("n", 0)), "odul": int(g.get("odul", 0))})
+	gorev_gunu = int(v.get("gorev_gunu", 0))
+	yan_gorev = str(v.get("yan_gorev", ""))
+	komsuluk = int(v.get("komsuluk", 0))
 	var p = v.get("konum", null)
 	if p is Array and p.size() == 3:
 		oyuncu_konum = Vector3(float(p[0]), float(p[1]), float(p[2]))
 		konum_kayitli = true
+
+
+# --- günlük görevler, yan görev, mahalle itibarı
+
+## Yeni günün 3 görevini seçer (aynı gün hep aynı görevler: tohum = gün).
+func _gunluk_yenile() -> void:
+	gorev_gunu = gun
+	var r := RandomNumberGenerator.new()
+	r.seed = 7919 * gun + 13
+	var havuz: Array = GOREV_HAVUZU.duplicate()
+	gorevler = []
+	for i in 3:
+		var g: Dictionary = havuz.pop_at(r.randi() % havuz.size())
+		gorevler.append({"id": g["id"], "ad": g["ad"], "hedef": g["hedef"], "n": 0, "odul": g["odul"]})
+
+
+## Görevi bir adım ilerletir. Tamamlandıysa ödülü verir ve mesaja eklenecek satırı döndürür.
+func gorev_ilerle(id: String) -> String:
+	var ek := ""
+	for g in gorevler:
+		if g["id"] != id or int(g["n"]) >= int(g["hedef"]):
+			continue
+		g["n"] = int(g["n"]) + 1
+		if int(g["n"]) >= int(g["hedef"]):
+			para += int(g["odul"])
+			Ses.cal("gorev_tamam", null, 0.0, -2.0)
+			ek += "\nGörev tamam: %s (+%d TL)" % [g["ad"], int(g["odul"])]
+			ek += _itibar_artir(1)
+			var hepsi := true
+			for h in gorevler:
+				if int(h["n"]) < int(h["hedef"]):
+					hepsi = false
+			if hepsi:
+				para += GOREV_HEPSI_ODUL
+				ek += "\nBugünün bütün görevlerini bitirdin! (+%d TL)" % GOREV_HEPSI_ODUL
+	return ek
+
+
+func itibar_seviye() -> int:
+	var i := 0
+	for k in ITIBAR_SEVIYELERI.size():
+		if komsuluk >= int(ITIBAR_SEVIYELERI[k][1]):
+			i = k
+	return i
+
+
+func _itibar_artir(n: int) -> String:
+	var once := itibar_seviye()
+	komsuluk += n
+	var sonra := itibar_seviye()
+	if sonra > once:
+		return "\nMahallede artık \"%s\" olarak biliniyorsun!" % ITIBAR_SEVIYELERI[sonra][0]
+	return ""
+
+
+## Bir sakin oyuncuyu selamladı (npc.gd). tip: "teyze", "ogrenci", "memur", "isci", "kadin" ya da "".
+## Sakinin balonunda söyleyeceği özel söz varsa döndürür (yan görev), yoksa "".
+func selamlasti(tip: String) -> String:
+	var ek := gorev_ilerle("selam")
+	var soz := ""
+	if tip == "teyze":
+		ek += gorev_ilerle("teyze")
+		if yan_gorev == "ekmek_alindi":
+			yan_gorev = ""
+			para += 60
+			soz = "Sağ ol evladım, Allah razı olsun!"
+			ek += "\nTeyzeye ekmeğini götürdün. Hayır duasını aldın! (+60 TL)" + _itibar_artir(2)
+		elif yan_gorev == "" and not gece_mi() and randf() < 0.35:
+			yan_gorev = "ekmek"
+			soz = "Evladım, bakkaldan bana bir ekmek alır mısın?"
+			ek += "\nYan görev: Teyze bakkaldan ekmek istedi. Alışverişte ekmek de al, sonra ona götür."
+	if ek != "":
+		mesaj.emit(ek.strip_edges())
+	return soz

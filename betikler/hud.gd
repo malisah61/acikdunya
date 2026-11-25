@@ -5,7 +5,7 @@ extends CanvasLayer
 signal eylem_istendi
 
 const JOYSTICK := preload("res://betikler/joystick.gd")
-const EYLEM_IKONU := {"uyu": "ikon_yatak", "simit": "ikon_simit", "cay": "ikon_cay", "nobet": "ikon_nobet"}
+const EYLEM_IKONU := {"uyu": "ikon_yatak", "simit": "ikon_simit", "cay": "ikon_cay", "nobet": "ikon_nobet", "bakkal_is": "ikon_raf", "garson": "ikon_tepsi"}
 
 var oyuncu
 var kamera
@@ -85,6 +85,11 @@ func _ready() -> void:
 	kd.pressed.connect(karakter_ekrani_ac)
 	var td := _dugme(ust, "Telefon", Vector2(130, 60))
 	td.pressed.connect(telefon_ac)
+	var td_ikon := gorsel("ikon_telefon")
+	if td_ikon:
+		td.icon = td_ikon
+		td.expand_icon = true
+		td.custom_minimum_size.x = 170
 	var eksi := _dugme(ust, "-", Vector2(60, 60))
 	eksi.pressed.connect(func() -> void: kamera.yakinlas(3.0))
 	var arti := _dugme(ust, "+", Vector2(60, 60))
@@ -208,7 +213,7 @@ func mesaj_goster(metin: String) -> void:
 	if not metin.contains("TL)"):
 		Ses.cal("bildirim", null, 0.0, -4.0)
 	mesaj_etiket.text = metin
-	_mesaj_sure = 4.0
+	_mesaj_sure = 3.0 + 1.2 * metin.count("\n")
 	mesaj_etiket.modulate.a = 1.0
 
 
@@ -358,7 +363,12 @@ func _telefon_kur(kok: Control) -> void:
 	var baslik := _etiket(vb, 26)
 	baslik.text = "Telefon"
 	baslik.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	telefon_yazi = _etiket(vb, 19)
+	# görevlerle yazı uzadı: küçük ekranlarda kaydırılabilsin
+	var kaydir := ScrollContainer.new()
+	kaydir.custom_minimum_size = Vector2(400, 350)
+	kaydir.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	vb.add_child(kaydir)
+	telefon_yazi = _etiket(kaydir, 19)
 	telefon_yazi.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	telefon_yazi.custom_minimum_size.x = 388
 	_ses_kaydirici(vb, "Efekt sesi", Ses.efekt_duzey, func(v: float) -> void: Ses.duzey_ayarla(v, Ses.muzik_duzey))

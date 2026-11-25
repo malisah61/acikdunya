@@ -17,3 +17,10 @@
 - Yeni: Esnafla dostluk (Tanıdık → Ahbap 5 → Dost 15): ahbapta simit 20 TL / çay 8 TL, dostta mesaide %10 bahşiş. Telefonda "Dostlar" bölümü ve ses ayarı kaydırıcıları. Kayda yazılır.
 - Ses dosyaları (17, ~0,6 MB): 10 efekt + 2 ortam koddan sentez; 5 Türkçe replik Speko (gpt-4o-mini-tts). Liste: `assets/siparis_ses.json`, lisanslar: `assets/ses/LISANSLAR.md`. CC0 siteleri ağ engeline takıldı.
 - Görseller: yine sipariş verilemedi — `ATOLYE_TOKEN` secret'ı tanımlı değil ve oturumun `sprite-atolye` deposuna erişimi yok. `assets/ben/foto.png` yok.
+
+## 2026-11-25 (gece çalışması, 3. tur)
+- Yeni: **Günlük görevler** (`Oyun.GOREV_HAVUZU`): her gün 3 görev, ödüllü; hepsi bitince +50 TL. Telefonda "Bugünün görevleri" (yazı kaydırılabilir oldu). Kayda yazılır.
+- Yeni: **Yan görev — teyzenin ekmeği** ve **mahalle itibarı** (Yeni gelen → Mahallenin gözdesi).
+- İyileştirme: sakinlerin tipi var (teyze, kadın, öğrenci, memur, işçi) — her biri kendi cümlesi ve sesiyle selam verir. Mesaj süresi satır sayısına göre uzuyor.
+- Sesler (14 yeni): Speko ile 7 replik (öğrenci, memur, işçi, kadın selamı; Hasan ve Rıza teşekkürü; Dr. Selin terfi tebriği); koddan sentez (`araclar/ses_sentez.py`): kahvehane ve hastane iç ortamı, mahalle ve gece müziği, uyku, görev tamam, terfi fanfarı. İç mekâna girince o binanın ortam sesi açılıyor, müzik kısılıyor. Ezan: sentezle saygılı olmayacağı için atlandı.
+- Atölye: `siparis/siparis.py`'ye `"doku": true` → `tileable=true, auto=false` eki gönderildi. Bu oturumun atölyeye erişimi var; karakter ve ikon siparişi verildi.

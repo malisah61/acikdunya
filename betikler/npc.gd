@@ -18,7 +18,16 @@ var _oyuncu: Node3D
 var _balon: Label3D
 var _selam_sure := 0.0
 var _selamlasti := false
-var _teyze := false
+## Sakinin tipi: "teyze", "kadin", "ogrenci", "memur", "isci" ya da "" (kendi repliğiyle selam verir)
+var _tip := ""
+## Tipine göre balonda görünen söz (assets/ses/replik/sakin_<tip>_selam.ogg ile aynı cümle)
+const TIP_SOZ := {
+	"teyze": "Aman evladım, hoş geldin!",
+	"kadin": "Merhaba canım! Pazardan dönüyorum.",
+	"ogrenci": "Selam abi! Sınav vardı bugün.",
+	"memur": "Günaydın komşu, hayırlı işler.",
+	"isci": "Kolay gelsin usta! Şantiyeden geliyorum.",
+}
 
 
 func kur(h: Array, tohum: int) -> void:
@@ -38,7 +47,10 @@ func kur(h: Array, tohum: int) -> void:
 	var pantolon := Oyun.renk(Oyun.PANTOLON_RENKLERI, _rng.randi())
 	var sakal := _rng.randf() < 0.3
 	# uzun saçlı, sakalsız sakinlerin bir kısmı mahallenin teyzeleri: kendi repliğiyle selam verir
-	_teyze = sac_model == 1 and not sakal and _rng.randf() < 0.6
+	if sac_model == 1 and not sakal:
+		_tip = "teyze" if _rng.randf() < 0.6 else "kadin"
+	else:
+		_tip = ["ogrenci", "memur", "isci", "", ""][_rng.randi() % 5]
 	model = Karakter.olustur(ten, sac_renk, sac_model, gomlek, pantolon, sakal)
 	model.scale = Vector3.ONE * _rng.randf_range(0.9, 1.05)
 	add_child(model)
@@ -65,10 +77,15 @@ func _selam_ver() -> void:
 		sozler.append("İyi akşamlar!")
 	_balon.text = sozler[_rng.randi() % sozler.size()]
 	_selam_sure = 2.0
-	if _teyze and _rng.randf() < 0.5:
-		_balon.text = "Aman evladım, hoş geldin!"
+	if _tip != "" and _rng.randf() < 0.5:
+		_balon.text = TIP_SOZ[_tip]
 		_selam_sure = 3.5
-		Ses.replik("sakin_teyze", global_position + Vector3(0, 1.6, 0))
+		Ses.replik("sakin_" + _tip, global_position + Vector3(0, 1.6, 0))
+	# günlük görev / yan görev (teyzenin ekmeği): özel söz varsa balonda o görünür
+	var ozel := Oyun.selamlasti(_tip)
+	if ozel != "":
+		_balon.text = ozel
+		_selam_sure = 4.0
 
 
 func _nokta(i: int, j: int) -> Vector3:

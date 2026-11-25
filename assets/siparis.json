@@ -198,6 +198,58 @@
     1024
    ],
    "cikti": "assets/uretilen/karakterler/sakin_kadin.png"
+  },
+  {
+   "ad": "ikon_raf",
+   "tarif": "small wooden grocery shelf stacked with colorful boxes and jars, game item icon, cartoon, single object",
+   "tur": "esya",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 15,
+   "boyut": [
+    512,
+    512
+   ],
+   "cikti": "assets/uretilen/ikon_raf.png"
+  },
+  {
+   "ad": "ikon_tepsi",
+   "tarif": "round silver turkish tea serving tray with two tulip shaped tea glasses, game item icon, cartoon, single object",
+   "tur": "esya",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 16,
+   "boyut": [
+    512,
+    512
+   ],
+   "cikti": "assets/uretilen/ikon_tepsi.png"
+  },
+  {
+   "ad": "ikon_telefon",
+   "tarif": "simple modern smartphone with a bright screen, game ui icon, cartoon, single object",
+   "tur": "esya",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 17,
+   "boyut": [
+    512,
+    512
+   ],
+   "cikti": "assets/uretilen/ikon_telefon.png"
+  },
+  {
+   "ad": "ikon_ekmek",
+   "tarif": "turkish white bread loaf, crusty golden, game item icon, cartoon, single object",
+   "tur": "esya",
+   "stil": "cartoon",
+   "adet": 2,
+   "seed": 18,
+   "boyut": [
+    512,
+    512
+   ],
+   "cikti": "assets/uretilen/ikon_ekmek.png"
   }
  ]
 }

@@ -14,11 +14,15 @@ var efekt_duzey := 0.8
 var muzik_duzey := 0.6
 ## İçinde bulunulan bina sayısı (ana sahne günceller)
 var ic_mekan := 0
+## İçinde bulunulan binanın adı küçük harfle ("kahvehane", "hastane", "bakkal" ya da ev için "")
+var ic_yer := ""
 
 var _onbellek := {}
 var _efektler: Array[AudioStreamPlayer] = []
 var _konumlular: Array[AudioStreamPlayer3D] = []
 var _replik: AudioStreamPlayer3D
+## Konumsuz konuşma (işverenin teşekkürü, terfi tebriği)
+var _soz: AudioStreamPlayer
 var _replik_son := {}
 ## ortam/müzik katmanları: ad -> {oyuncu, hedef}
 var _katmanlar := {}
@@ -51,6 +55,9 @@ func _ready() -> void:
 	_replik.unit_size = 8.0
 	_replik.max_distance = 30.0
 	add_child(_replik)
+	_soz = AudioStreamPlayer.new()
+	_soz.bus = "Efekt"
+	add_child(_soz)
 	for ad in ["ortam/mahalle_gunduz", "ortam/gece", "ortam/kahvehane", "ortam/hastane", "muzik/mahalle", "muzik/gece"]:
 		var s := _yukle(ad)
 		if s == null:
@@ -104,6 +111,17 @@ func adim(zemin: String, konum: Vector3, kosuyor := false) -> void:
 	cal("adim_" + zemin, konum, 0.12, -4.0 if kosuyor else -8.0)
 
 
+## Konumsuz söz: assets/ses/replik/<ad>.ogg (ör. "doktor_selin_terfi"). Dosya yoksa sessiz.
+func soz(ad: String, gecikme := 0.6) -> void:
+	var s := _yukle("replik/" + ad)
+	if s == null:
+		return
+	if gecikme > 0.0:
+		await get_tree().create_timer(gecikme, true).timeout
+	_soz.stream = s
+	_soz.play()
+
+
 ## Kişinin selam repliği (assets/ses/replik/<kisi>_selam.ogg). Sık tekrarlamaz.
 func replik(kisi: String, konum: Vector3) -> void:
 	if kisi == "":
@@ -131,7 +149,10 @@ func _process(delta: float) -> void:
 	# dışarıdaki ortam içeride de kısık duyulur
 	var dis := 0.35 if icerde else 1.0
 	_hedef("ortam/gece" if gece else "ortam/mahalle_gunduz", dis)
-	_hedef("muzik/gece" if gece else "muzik/mahalle", 0.7)
+	# binanın kendi ortamı (kahvehane uğultusu, hastane koridoru); yoksa sadece dışarısı kısık duyulur
+	if icerde and ic_yer != "":
+		_hedef("ortam/" + ic_yer, 0.9)
+	_hedef("muzik/gece" if gece else "muzik/mahalle", 0.35 if icerde else 0.6)
 	for ad in _katmanlar:
 		var k: Dictionary = _katmanlar[ad]
 		k["duzey"] = move_toward(float(k["duzey"]), float(k["hedef"]), delta * 0.4)

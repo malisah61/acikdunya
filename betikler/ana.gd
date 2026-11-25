@@ -116,6 +116,7 @@ func _unhandled_input(e: InputEvent) -> void:
 func _ice_girdi(a) -> void:
 	kamera.ic_mekan += 1
 	Ses.ic_mekan += 1
+	Ses.ic_yer = String(a.ad).to_lower()
 	var kapi: Vector3 = a.global_position
 	Ses.cal("kapi", kapi)
 	if a.ad == "BAKKAL":
@@ -127,6 +128,8 @@ func _ice_girdi(a) -> void:
 func _disari_cikti(a) -> void:
 	kamera.ic_mekan = maxi(0, kamera.ic_mekan - 1)
 	Ses.ic_mekan = maxi(0, Ses.ic_mekan - 1)
+	if Ses.ic_mekan == 0:
+		Ses.ic_yer = ""
 	Ses.cal("kapi", a.global_position)
 
 
