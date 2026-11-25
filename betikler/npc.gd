@@ -14,6 +14,10 @@ var _kayma := Vector3.ZERO
 var _faz := 0.0
 var _bekle := 0.0
 var _rng := RandomNumberGenerator.new()
+var _oyuncu: Node3D
+var _balon: Label3D
+var _selam_sure := 0.0
+var _selamlasti := false
 
 
 func kur(h: Array, tohum: int) -> void:
@@ -32,6 +36,29 @@ func kur(h: Array, tohum: int) -> void:
 		Oyun.renk(Oyun.PANTOLON_RENKLERI, _rng.randi()), _rng.randf() < 0.3)
 	model.scale = Vector3.ONE * _rng.randf_range(0.9, 1.05)
 	add_child(model)
+	_balon = Label3D.new()
+	_balon.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_balon.position.y = 2.3
+	_balon.font_size = 40
+	_balon.pixel_size = 0.006
+	_balon.outline_size = 10
+	_balon.no_depth_test = true
+	_balon.visible = false
+	add_child(_balon)
+
+
+## Yanından geçen oyuncuyu durup selamlar (bir kere; oyuncu uzaklaşınca yeniden selamlayabilir).
+func _selam_ver() -> void:
+	var d := Oyun.dakika
+	var sozler: Array = ["Selam komşu!", "Nasılsın?", "Hayırdır, nereye böyle?"]
+	if d < 11.0 * 60.0:
+		sozler.append("Günaydın!")
+	elif d < 18.0 * 60.0:
+		sozler.append("Kolay gelsin!")
+	else:
+		sozler.append("İyi akşamlar!")
+	_balon.text = sozler[_rng.randi() % sozler.size()]
+	_selam_sure = 2.0
 
 
 func _nokta(i: int, j: int) -> Vector3:
@@ -70,6 +97,22 @@ func _process(delta: float) -> void:
 		visible = false
 		return
 	visible = true
+	if _oyuncu == null:
+		_oyuncu = get_tree().get_first_node_in_group("oyuncu") as Node3D
+	if _oyuncu:
+		var uzaklik := global_position.distance_to(_oyuncu.global_position)
+		if not _selamlasti and uzaklik < 2.5:
+			_selamlasti = true
+			_selam_ver()
+		elif _selamlasti and uzaklik > 7.0:
+			_selamlasti = false
+		if _selam_sure > 0.0:
+			_selam_sure -= delta
+			_balon.visible = _selam_sure > 0.0
+			var f := _oyuncu.global_position - global_position
+			model.rotation.y = lerp_angle(model.rotation.y, atan2(f.x, f.z), clampf(8.0 * delta, 0.0, 1.0))
+			Karakter.yuru(model, _faz, 0.0)
+			return
 	if _bekle > 0.0:
 		_bekle -= delta
 		Karakter.yuru(model, _faz, 0.0)

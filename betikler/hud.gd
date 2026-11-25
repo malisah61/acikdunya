@@ -20,6 +20,9 @@ var kisi_etiket: Label
 var mesaj_etiket: Label
 var perde: ColorRect
 var karakter_paneli: PanelContainer
+var telefon_paneli: PanelContainer
+var telefon_yazi: Label
+var _zaman := 0.0
 var _mesaj_sure := 0.0
 var _dokunmatik := false
 
@@ -80,6 +83,8 @@ func _ready() -> void:
 	sag.add_child(ust)
 	var kd := _dugme(ust, "Karakter", Vector2(130, 60))
 	kd.pressed.connect(karakter_ekrani_ac)
+	var td := _dugme(ust, "Telefon", Vector2(130, 60))
+	td.pressed.connect(telefon_ac)
 	var eksi := _dugme(ust, "-", Vector2(60, 60))
 	eksi.pressed.connect(func() -> void: kamera.yakinlas(3.0))
 	var arti := _dugme(ust, "+", Vector2(60, 60))
@@ -133,6 +138,7 @@ func _ready() -> void:
 	kok.add_child(perde)
 
 	_karakter_paneli_kur(kok)
+	_telefon_kur(kok)
 	if not Oyun.karakter_hazir:
 		karakter_ekrani_ac()
 
@@ -186,6 +192,12 @@ func _process(delta: float) -> void:
 	para_etiket.text = "Para: %d TL" % Oyun.para
 	tokluk_cubuk.value = Oyun.tokluk
 	enerji_cubuk.value = Oyun.enerji
+	# ihtiyaç azalınca çubuk kırmızı yanıp söner
+	_zaman += delta
+	var nabiz := 0.5 + 0.5 * sin(_zaman * 6.0)
+	var kirmizi := Color(1.0, 0.35, 0.35)
+	tokluk_cubuk.modulate = kirmizi.lerp(Color.WHITE, nabiz) if Oyun.tokluk < 20.0 else Color.WHITE
+	enerji_cubuk.modulate = kirmizi.lerp(Color.WHITE, nabiz) if Oyun.enerji < 15.0 else Color.WHITE
 	if _mesaj_sure > 0.0:
 		_mesaj_sure -= delta
 		mesaj_etiket.modulate.a = clampf(_mesaj_sure, 0.0, 1.0)
@@ -318,6 +330,56 @@ func _secici(vb: VBoxContainer, baslik: String, anahtar: String, renkler: Array)
 	)
 
 
+# --- telefon menüsü: meslekler, kariyer basamakları, ipucu
+func _telefon_kur(kok: Control) -> void:
+	telefon_paneli = PanelContainer.new()
+	telefon_paneli.set_anchors_preset(Control.PRESET_CENTER)
+	telefon_paneli.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	telefon_paneli.grow_vertical = Control.GROW_DIRECTION_BOTH
+	telefon_paneli.custom_minimum_size = Vector2(440, 0)
+	telefon_paneli.visible = false
+	var stil := StyleBoxFlat.new()
+	stil.bg_color = Color(0.07, 0.08, 0.11, 0.96)
+	stil.border_color = Color(0.32, 0.33, 0.38)
+	stil.set_border_width_all(6)
+	stil.set_corner_radius_all(28)
+	telefon_paneli.add_theme_stylebox_override("panel", stil)
+	kok.add_child(telefon_paneli)
+	var kenar := MarginContainer.new()
+	for k in ["margin_left", "margin_right", "margin_top", "margin_bottom"]:
+		kenar.add_theme_constant_override(k, 26)
+	telefon_paneli.add_child(kenar)
+	var vb := VBoxContainer.new()
+	vb.add_theme_constant_override("separation", 12)
+	kenar.add_child(vb)
+	var baslik := _etiket(vb, 26)
+	baslik.text = "Telefon"
+	baslik.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	telefon_yazi = _etiket(vb, 19)
+	telefon_yazi.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	telefon_yazi.custom_minimum_size.x = 388
+	var kapat := _dugme(vb, "Kapat", Vector2(200, 56))
+	kapat.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	kapat.pressed.connect(func() -> void:
+		telefon_paneli.visible = false
+		Oyun.duraklat = false
+	)
+
+
+func telefon_ac() -> void:
+	if karakter_paneli.visible:
+		return
+	if telefon_paneli.visible:
+		telefon_paneli.visible = false
+		Oyun.duraklat = false
+		return
+	telefon_yazi.text = Oyun.telefon_metni()
+	Oyun.duraklat = true
+	telefon_paneli.visible = true
+
+
 func karakter_ekrani_ac() -> void:
+	if telefon_paneli.visible:
+		telefon_paneli.visible = false
 	Oyun.duraklat = true
 	karakter_paneli.visible = true

@@ -14,6 +14,13 @@ const SAC_RENKLERI := [Color(0.08, 0.06, 0.05), Color(0.3, 0.18, 0.1), Color(0.5
 const GOMLEK_RENKLERI := [Color(0.2, 0.4, 0.75), Color(0.88, 0.88, 0.88), Color(0.7, 0.15, 0.15), Color(0.2, 0.55, 0.3), Color(0.15, 0.15, 0.18), Color(0.9, 0.6, 0.15)]
 const PANTOLON_RENKLERI := [Color(0.15, 0.2, 0.35), Color(0.12, 0.12, 0.12), Color(0.45, 0.38, 0.28), Color(0.35, 0.35, 0.38)]
 const SAC_MODELLERI := ["Kısa", "Uzun", "Kel"]
+## Meslekler ve kariyer basamakları: [unvan, gereken iş sayısı, iş başı ücret TL]
+const MESLEKLER := {
+	"nobet": {"ad": "Hastane", "is": "Nöbete gir", "bitti": "Nöbet", "saat": 8, "enerji": 50,
+		"basamak": [["Stajyer", 0, 400], ["Hemşire", 3, 480], ["Asistan Doktor", 8, 600], ["Uzman Doktor", 15, 800]]},
+	"bakkal_is": {"ad": "Bakkal", "is": "Rafları diz", "bitti": "Mesai", "saat": 4, "enerji": 30,
+		"basamak": [["Çırak", 0, 150], ["Tezgâhtar", 4, 200], ["Kalfa", 10, 260]]},
+}
 
 var gun := 1
 var dakika := 8.0 * 60.0
@@ -27,6 +34,10 @@ var konum_kayitli := false
 ## Karakter ekranı açıkken saat ve hareket durur
 var duraklat := false
 var _kayit_sayaci := 0.0
+## Her meslekte tamamlanan iş sayısı (kariyer basamağını belirler)
+var is_sayilari := {"nobet": 0, "bakkal_is": 0}
+var _ac_uyarildi := false
+var _yorgun_uyarildi := false
 
 
 func _ready() -> void:
@@ -73,6 +84,21 @@ func ilerle(dk: float, uyku := false) -> void:
 		enerji = clampf(enerji - yorulma, 0.0, 100.0)
 		if enerji <= 0.0:
 			_bayil()
+	_uyar()
+
+
+## İhtiyaç azalınca bir kere uyarır; toparlanınca uyarı yeniden kurulur.
+func _uyar() -> void:
+	if tokluk < 20.0 and not _ac_uyarildi:
+		_ac_uyarildi = true
+		mesaj.emit("Karnın acıktı! Bakkaldan simit alabilirsin.")
+	elif tokluk > 30.0:
+		_ac_uyarildi = false
+	if enerji < 15.0 and not _yorgun_uyarildi:
+		_yorgun_uyarildi = true
+		mesaj.emit("Çok yorgunsun! Eve gidip uyu ya da kahvehanede çay iç.")
+	elif enerji > 25.0:
+		_yorgun_uyarildi = false
 
 
 func _bayil() -> void:
@@ -125,22 +151,83 @@ func eylem(ad: String) -> bool:
 			ilerle(20.0)
 			mesaj.emit("Bir çay içtin, açıldın. (-10 TL)")
 			return false
-		"nobet":
-			if enerji < 50.0:
-				mesaj.emit("Nöbete girmek için çok yorgunsun. Önce dinlen.")
-				return false
-			ilerle(8.0 * 60.0)
-			para += 400
-			mesaj.emit("Nöbet bitti! 8 saat çalıştın. (+400 TL)")
-			kaydet()
-			return true
+		"nobet", "bakkal_is":
+			return _calis(ad)
 	return false
+
+
+## Meslekteki mevcut kariyer basamağının sırası.
+func basamak(meslek: String) -> int:
+	var b: Array = MESLEKLER[meslek]["basamak"]
+	var n := int(is_sayilari.get(meslek, 0))
+	var i := 0
+	for k in b.size():
+		if n >= int(b[k][1]):
+			i = k
+	return i
+
+
+func _calis(meslek: String) -> bool:
+	var m: Dictionary = MESLEKLER[meslek]
+	if enerji < float(m["enerji"]):
+		mesaj.emit("İşe girmek için çok yorgunsun. Önce dinlen.")
+		return false
+	var b: Array = m["basamak"]
+	var once := basamak(meslek)
+	var ucret := int(b[once][2])
+	var saat := int(m["saat"])
+	ilerle(saat * 60.0)
+	para += ucret
+	is_sayilari[meslek] = int(is_sayilari.get(meslek, 0)) + 1
+	var sonra := basamak(meslek)
+	var metin: String = "%s bitti! %d saat çalıştın. (+%d TL)" % [m["bitti"], saat, ucret]
+	if sonra > once:
+		metin += "\nTERFİ! Yeni unvanın: %s (iş başı %d TL)" % [b[sonra][0], int(b[sonra][2])]
+	mesaj.emit(metin)
+	kaydet()
+	return true
+
+
+## Eylem düğmesinin yazısı (meslek eylemlerinde güncel ücret ve unvan).
+func eylem_metni(ad: String, varsayilan: String) -> String:
+	if not MESLEKLER.has(ad):
+		return varsayilan
+	var m: Dictionary = MESLEKLER[ad]
+	var b: Array = m["basamak"][basamak(ad)]
+	return "%s (%d saat, +%d TL) — %s" % [m["is"], int(m["saat"]), int(b[2]), b[0]]
+
+
+## Telefon menüsünde görünen özet.
+func telefon_metni() -> String:
+	var s: String = "%s\n%s   •   Para: %d TL\n\nMESLEKLER\n" % [karakter["isim"], saat_metni(), para]
+	for ad in MESLEKLER:
+		var m: Dictionary = MESLEKLER[ad]
+		var b: Array = m["basamak"]
+		var i := basamak(ad)
+		var n := int(is_sayilari.get(ad, 0))
+		s += "• %s: %s — iş başı %d TL (%d iş)\n" % [m["ad"], b[i][0], int(b[i][2]), n]
+		if i + 1 < b.size():
+			s += "     %s olmak için %d iş daha\n" % [b[i + 1][0], int(b[i + 1][1]) - n]
+		else:
+			s += "     En üst basamaktasın!\n"
+	s += "\nİPUCU\n"
+	if tokluk < 30.0:
+		s += "Karnın aç: bakkalda simit + ayran 25 TL."
+	elif enerji < 30.0:
+		s += "Yorgunsun: evde uyu ya da kahvehanede çay iç."
+	elif para < 50:
+		s += "Para azaldı: hastanede nöbet ya da bakkalda mesai."
+	elif gece_mi():
+		s += "Gece oldu, sakinler evlerine çekildi. Uyumak için iyi bir saat."
+	else:
+		s += "Her işte biraz daha çalış, terfi edip daha çok kazan."
+	return s
 
 
 func kaydet() -> void:
 	var veri := {
 		"gun": gun, "dakika": dakika, "para": para, "tokluk": tokluk, "enerji": enerji,
-		"karakter": karakter, "karakter_hazir": karakter_hazir,
+		"karakter": karakter, "karakter_hazir": karakter_hazir, "is_sayilari": is_sayilari,
 		"konum": [oyuncu_konum.x, oyuncu_konum.y, oyuncu_konum.z],
 	}
 	var f := FileAccess.open(KAYIT_YOLU, FileAccess.WRITE)
@@ -172,6 +259,11 @@ func yukle() -> void:
 				karakter[a] = bool(k[a])
 			else:
 				karakter[a] = int(k[a])
+	var isler = v.get("is_sayilari", {})
+	if typeof(isler) == TYPE_DICTIONARY:
+		for a in is_sayilari.keys():
+			if isler.has(a):
+				is_sayilari[a] = int(isler[a])
 	var p = v.get("konum", null)
 	if p is Array and p.size() == 3:
 		oyuncu_konum = Vector3(float(p[0]), float(p[1]), float(p[2]))

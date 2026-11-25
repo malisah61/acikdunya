@@ -7,6 +7,8 @@ const KAMERA := preload("res://betikler/kamera.gd")
 const NPC := preload("res://betikler/npc.gd")
 const HUD := preload("res://betikler/hud.gd")
 const HALK_SAYISI := 24
+## Gece aynı anda yanan en fazla sokak lambası ışığı (gl_compatibility'de her ışık pahalı)
+const YAKIN_LAMBA := 8
 
 var gunes: DirectionalLight3D
 var ortam: Environment
@@ -16,6 +18,7 @@ var hud
 var bilgi: Dictionary
 var aktif_bolgeler: Array = []
 var _lambalar_acik := false
+var _lamba_sayac := 0.0
 
 
 func _ready() -> void:
@@ -66,7 +69,7 @@ func _ortam_kur() -> void:
 	add_child(gunes)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	var s := Oyun.dakika / 60.0
 	var t := (s - 6.0) / 12.0
 	var yukseklik := sin(t * PI)
@@ -85,7 +88,24 @@ func _process(_delta: float) -> void:
 		for l in bilgi["lambalar"]:
 			l.visible = gece
 		bilgi["pencere_malzeme"].emission_energy_multiplier = 1.0 if gece else 0.0
+		bilgi["lamba_bas_malzeme"].emission_energy_multiplier = 2.0 if gece else 0.0
+		_lambalari_guncelle()
+	_lamba_sayac += delta
+	if _lambalar_acik and _lamba_sayac > 0.5:
+		_lamba_sayac = 0.0
+		_lambalari_guncelle()
 	Oyun.oyuncu_konum = oyuncu.global_position
+
+
+## Sadece oyuncuya en yakın YAKIN_LAMBA sokak lambasının ışığını açar; gündüz hepsi kapalı.
+func _lambalari_guncelle() -> void:
+	var p: Vector3 = oyuncu.global_position
+	var sirali: Array = bilgi["sokak_lambalari"].duplicate()
+	if _lambalar_acik:
+		sirali.sort_custom(func(a, b) -> bool:
+			return a.global_position.distance_squared_to(p) < b.global_position.distance_squared_to(p))
+	for i in sirali.size():
+		sirali[i].visible = _lambalar_acik and i < YAKIN_LAMBA
 
 
 func _unhandled_input(e: InputEvent) -> void:
@@ -96,7 +116,7 @@ func _unhandled_input(e: InputEvent) -> void:
 func _bolgeye_girdi(body: Node3D, b) -> void:
 	if body == oyuncu:
 		aktif_bolgeler.append(b)
-		hud.eylem_goster(b.eylem, b.metin, b.kisi, b.kisi_ad)
+		hud.eylem_goster(b.eylem, Oyun.eylem_metni(b.eylem, b.metin), b.kisi, b.kisi_ad)
 
 
 func _bolgeden_cikti(body: Node3D, b) -> void:
@@ -106,7 +126,7 @@ func _bolgeden_cikti(body: Node3D, b) -> void:
 			hud.eylem_gizle()
 		else:
 			var son = aktif_bolgeler.back()
-			hud.eylem_goster(son.eylem, son.metin, son.kisi, son.kisi_ad)
+			hud.eylem_goster(son.eylem, Oyun.eylem_metni(son.eylem, son.metin), son.kisi, son.kisi_ad)
 
 
 func _eylem() -> void:
@@ -115,6 +135,10 @@ func _eylem() -> void:
 	var b = aktif_bolgeler.back()
 	if Oyun.eylem(b.eylem):
 		hud.karart()
+	# ücret/unvan değişmiş olabilir (terfi): düğme yazısını yenile
+	if not aktif_bolgeler.is_empty():
+		var son = aktif_bolgeler.back()
+		hud.eylem_goster(son.eylem, Oyun.eylem_metni(son.eylem, son.metin), son.kisi, son.kisi_ad)
 
 
 func _bayildi() -> void:

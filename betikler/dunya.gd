@@ -81,13 +81,18 @@ static func silindir(ebeveyn: Node3D, yaricap: float, boy: float, konum: Vector3
 
 ## Çok sayıda aynı kutuyu tek çizimde basar (pencereler, yol çizgileri): telefonda akıcılık için.
 static func toplu(kok: Node3D, boyut: Vector3, mat: Material, konumlar: Array) -> void:
+	var bm := BoxMesh.new()
+	bm.size = boyut
+	toplu_mesh(kok, bm, mat, konumlar)
+
+
+## toplu() ile aynı, ama istenen herhangi bir mesh ile (silindir direkler vb.).
+static func toplu_mesh(kok: Node3D, mesh: Mesh, mat: Material, konumlar: Array) -> void:
 	if konumlar.is_empty():
 		return
 	var mm := MultiMesh.new()
 	mm.transform_format = MultiMesh.TRANSFORM_3D
-	var bm := BoxMesh.new()
-	bm.size = boyut
-	mm.mesh = bm
+	mm.mesh = mesh
 	mm.instance_count = konumlar.size()
 	for i in konumlar.size():
 		mm.set_instance_transform(i, Transform3D(Basis(), konumlar[i]))
@@ -236,10 +241,20 @@ static func araba(kok: Node3D, konum: Vector3, renk: Color, aci: float) -> void:
 			kutu(n, Vector3(0.25, 0.6, 0.6), Vector3(x, 0.3, z), malzeme(Color(0.08, 0.08, 0.08)), false)
 
 
+## Sokak lambası: direk ve başlık sonda tek çizimde (MultiMesh) basılır; burada sadece çarpışma ve ışık kurulur.
+## Gece yalnız oyuncuya en yakın birkaç lambanın ışığı yanar (ana.gd), telefonda akıcılık için.
 static func lamba(kok: Node3D, konum: Vector3, sonuc: Dictionary) -> void:
-	silindir(kok, 0.08, 4.5, konum + Vector3(0, 2.25, 0), malzeme(Color(0.25, 0.25, 0.28)))
-	var bas := malzeme(Color(1.0, 0.95, 0.75))
-	kutu(kok, Vector3(0.5, 0.2, 0.5), konum + Vector3(0, 4.55, 0), bas, false)
+	sonuc["lamba_direkleri"].append(konum + Vector3(0, 2.25, 0))
+	sonuc["lamba_baslari"].append(konum + Vector3(0, 4.55, 0))
+	var sb := StaticBody3D.new()
+	var cs := CollisionShape3D.new()
+	var sh := CylinderShape3D.new()
+	sh.radius = 0.08
+	sh.height = 4.5
+	cs.shape = sh
+	sb.position = konum + Vector3(0, 2.25, 0)
+	sb.add_child(cs)
+	kok.add_child(sb)
 	var isik := OmniLight3D.new()
 	isik.position = konum + Vector3(0, 4.2, 0)
 	isik.omni_range = 10.0
@@ -247,7 +262,7 @@ static func lamba(kok: Node3D, konum: Vector3, sonuc: Dictionary) -> void:
 	isik.light_color = Color(1.0, 0.85, 0.6)
 	isik.visible = false
 	kok.add_child(isik)
-	sonuc["lambalar"].append(isik)
+	sonuc["sokak_lambalari"].append(isik)
 
 
 static func yuruyus_yolu(kok: Node3D, x: float, z1: float, z2: float) -> void:
@@ -255,7 +270,7 @@ static func yuruyus_yolu(kok: Node3D, x: float, z1: float, z2: float) -> void:
 
 
 static func kur(kok: Node3D) -> Dictionary:
-	var sonuc := {"lambalar": [], "bolgeler": [], "ic_mekanlar": [], "pencereler": [], "kapilar": [], "baslangic": Vector3(30, 0, -9), "ev_yatak": Vector3(30, 0, -15)}
+	var sonuc := {"lambalar": [], "sokak_lambalari": [], "lamba_direkleri": [], "lamba_baslari": [], "bolgeler": [], "ic_mekanlar": [], "pencereler": [], "kapilar": [], "baslangic": Vector3(30, 0, -9), "ev_yatak": Vector3(30, 0, -15)}
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 61
 
@@ -347,6 +362,7 @@ static func kur(kok: Node3D) -> Dictionary:
 	kutu(bakkal, Vector3(3.0, 1.0, 0.8), Vector3(3.5, 0.5, 0.8), malzeme(Color(0.5, 0.33, 0.2)))
 	sabit_kisi(bakkal, Vector3(3.5, 0, -0.2), Color(0.95, 0.95, 0.95), rng)
 	bolge(bakkal, Vector3(3.5, 1, 2.2), Vector3(3.0, 2, 1.8), "simit", "Simit + ayran al (25 TL)", sonuc, "bakkal_hasan", "Bakkal Hasan Amca")
+	bolge(bakkal, Vector3(0.5, 1, -2.6), Vector3(2.4, 2, 1.6), "bakkal_is", "Rafları diz", sonuc, "bakkal_hasan", "Bakkal Hasan Amca")
 	yuruyus_yolu(kok, -30, -9, -7)
 	apartman(kok, Vector3(-46, 0, -14), 10, 10, 9, Color(0.82, 0.72, 0.62), sonuc)
 	apartman(kok, Vector3(-14, 0, -14), 10, 10, 12, Color(0.72, 0.76, 0.82), sonuc)
@@ -436,4 +452,19 @@ static func kur(kok: Node3D) -> Dictionary:
 	toplu(kok, Vector3(1.2, 1.4, 0.08), pencere, sonuc["pencereler"])
 	toplu(kok, Vector3(1.4, 2.2, 0.08), malzeme(Color(0.35, 0.22, 0.12)), sonuc["kapilar"])
 	sonuc["pencere_malzeme"] = pencere
+
+	# --- sokak lambaları tek çizimde; başlıklar gece kendiliğinden parlar
+	var direk := CylinderMesh.new()
+	direk.top_radius = 0.08
+	direk.bottom_radius = 0.08
+	direk.height = 4.5
+	direk.radial_segments = 8
+	toplu_mesh(kok, direk, malzeme(Color(0.25, 0.25, 0.28)), sonuc["lamba_direkleri"])
+	var bas := StandardMaterial3D.new()
+	bas.albedo_color = Color(1.0, 0.95, 0.75)
+	bas.emission_enabled = true
+	bas.emission = Color(1.0, 0.85, 0.55)
+	bas.emission_energy_multiplier = 0.0
+	toplu(kok, Vector3(0.5, 0.2, 0.5), bas, sonuc["lamba_baslari"])
+	sonuc["lamba_bas_malzeme"] = bas
 	return sonuc
