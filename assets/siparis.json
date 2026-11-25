@@ -2,9 +2,9 @@
  "siparisler": [
   {
    "ad": "oyuncu_portre",
-   "tarif": "friendly cartoon portrait of a man, head and shoulders, warm smile, game avatar icon, clean outline",
+   "tarif": "photorealistic portrait photograph of a real man in his thirties, short dark hair, light stubble beard, natural skin texture with visible pores, soft window light, head and shoulders, neutral expression, plain light grey background, sharp focus, 85mm lens",
    "tur": "karakter",
-   "stil": "cartoon",
+   "stil": "other",
    "adet": 2,
    "seed": 61,
    "boyut": [
@@ -69,9 +69,9 @@
   },
   {
    "ad": "kisi_oyuncu",
-   "tarif": "a man in his thirties, short dark hair, light beard, casual shirt and jeans, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tarif": "photorealistic full body photograph of a real man in his thirties, short dark hair, light stubble beard, casual shirt and jeans, natural skin texture, realistic human anatomy and body proportions, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character, sharp focus, studio lighting",
    "tur": "karakter",
-   "stil": "cartoon",
+   "stil": "other",
    "adet": 2,
    "seed": 100,
    "boyut": [
@@ -84,9 +84,9 @@
   },
   {
    "ad": "kisi_bakkal_hasan",
-   "tarif": "friendly turkish grocer uncle in his sixties, grey moustache, flat cap, white apron over vest, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tarif": "photorealistic full body photograph of a real friendly turkish grocer in his sixties, grey moustache, flat cap, white apron over a vest, wrinkled natural skin, realistic human anatomy and body proportions, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character, sharp focus, studio lighting",
    "tur": "karakter",
-   "stil": "cartoon",
+   "stil": "other",
    "adet": 2,
    "seed": 101,
    "boyut": [
@@ -97,9 +97,9 @@
   },
   {
    "ad": "kisi_kahveci_riza",
-   "tarif": "turkish tea house owner in his fifties, black moustache, rolled-up sleeves, dark vest, white shirt, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tarif": "photorealistic full body photograph of a real turkish tea house owner in his fifties, black moustache, white shirt with rolled-up sleeves, dark vest, natural skin texture, realistic human anatomy and body proportions, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character, sharp focus, studio lighting",
    "tur": "karakter",
-   "stil": "cartoon",
+   "stil": "other",
    "adet": 2,
    "seed": 102,
    "boyut": [
@@ -110,9 +110,9 @@
   },
   {
    "ad": "kisi_doktor_selin",
-   "tarif": "female doctor in her thirties, hair in a bun, white coat over blue scrubs, stethoscope around neck, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tarif": "photorealistic full body photograph of a real female doctor in her thirties, hair in a bun, white coat over blue scrubs, stethoscope around her neck, natural skin texture, realistic human anatomy and body proportions, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character, sharp focus, studio lighting",
    "tur": "karakter",
-   "stil": "cartoon",
+   "stil": "other",
    "adet": 2,
    "seed": 103,
    "boyut": [
@@ -123,9 +123,9 @@
   },
   {
    "ad": "kisi_hemsire_ayse",
-   "tarif": "adult female nurse in her late twenties, light blue scrubs uniform with short sleeves, brown ponytail, white sneakers, full body from head to feet, 3D cartoon render style like a stylized mobile game character, realistic proportions, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tarif": "photorealistic full body photograph of a real adult female nurse in her late twenties, light blue scrubs uniform with short sleeves, brown ponytail, white sneakers, realistic human anatomy and natural body proportions, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character, sharp focus, studio lighting",
    "tur": "karakter",
-   "stil": "cartoon",
+   "stil": "other",
    "adet": 2,
    "seed": 114,
    "boyut": [
@@ -136,9 +136,9 @@
   },
   {
    "ad": "kisi_sakin_teyze",
-   "tarif": "elderly turkish woman, headscarf, long floral skirt, knitted cardigan, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tarif": "photorealistic full body photograph of a real elderly turkish woman, headscarf, long floral skirt, knitted cardigan, wrinkled natural skin, realistic human anatomy and body proportions, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character, sharp focus, studio lighting",
    "tur": "karakter",
-   "stil": "cartoon",
+   "stil": "other",
    "adet": 2,
    "seed": 105,
    "boyut": [
@@ -149,9 +149,9 @@
   },
   {
    "ad": "kisi_sakin_ogrenci",
-   "tarif": "university student in his twenties, hoodie, backpack straps, sneakers, messy hair, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tarif": "photorealistic full body photograph of a real university student in his twenties, hoodie, backpack straps, sneakers, messy hair, natural skin texture, realistic human anatomy and body proportions, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character, sharp focus, studio lighting",
    "tur": "karakter",
-   "stil": "cartoon",
+   "stil": "other",
    "adet": 2,
    "seed": 106,
    "boyut": [
@@ -162,9 +162,9 @@
   },
   {
    "ad": "kisi_sakin_memur",
-   "tarif": "office worker man in his forties, grey suit, tie, glasses, neat side part, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tarif": "photorealistic full body photograph of a real office worker man in his forties, grey suit, tie, glasses, neat side part, natural skin texture, realistic human anatomy and body proportions, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character, sharp focus, studio lighting",
    "tur": "karakter",
-   "stil": "cartoon",
+   "stil": "other",
    "adet": 2,
    "seed": 107,
    "boyut": [
@@ -175,9 +175,9 @@
   },
   {
    "ad": "kisi_sakin_isci",
-   "tarif": "construction worker man, orange safety vest, yellow hard hat, work boots, full body cartoon game character, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character",
+   "tarif": "photorealistic full body photograph of a real construction worker man, orange safety vest, yellow hard hat, work boots, natural skin texture, realistic human anatomy and body proportions, standing in a T-pose with arms stretched out to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character, sharp focus, studio lighting",
    "tur": "karakter",
-   "stil": "cartoon",
+   "stil": "other",
    "adet": 2,
    "seed": 108,
    "boyut": [
@@ -188,9 +188,9 @@
   },
   {
    "ad": "kisi_sakin_kadin",
-   "tarif": "one woman in her thirties, long brown hair, denim jacket, long skirt, ankle boots, full body from head to feet, 3D cartoon render style, standing in a T-pose with both arms stretched straight out horizontally to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character, only one person",
+   "tarif": "photorealistic full body photograph of one real woman in her thirties, long brown hair, denim jacket, long skirt, ankle boots, natural skin texture, realistic human anatomy and body proportions, standing in a T-pose with both arms stretched straight out horizontally to the sides, facing the viewer, front view, symmetrical, empty hands, plain light grey background, single character, only one person, sharp focus, studio lighting",
    "tur": "karakter",
-   "stil": "cartoon",
+   "stil": "other",
    "adet": 2,
    "seed": 119,
    "boyut": [
